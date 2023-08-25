@@ -108,12 +108,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         : TextDecoration.none,
                   ),
                 ),
-                leading: Checkbox(
-                  value: isCompleted,
-                  onChanged: (value) {
-                    _toggleTask(index);
-                  },
-                ),
                 trailing: isCompleted ? Icon(Icons.check, color: Colors.green) : null,
               ),
             ),
