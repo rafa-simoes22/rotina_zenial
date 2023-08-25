@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() => runApp(TaskListApp());
 
@@ -19,30 +22,51 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-  List<String> tasks = [
-    '1 - Estudar matemática',
-    '2 - Estudar bioquímica',
-    '3 - Estudar literatura',
-    '4 - Fazer simulado de física',
-    '5 - Ver vídeo aula de história',
-    '6 - Ler A República de Platão',
-  ];
-
-  List<bool> taskCompleted = List.generate(6, (index) => false);
+  List<Map<String, dynamic>> tasks = [];
 
   TextEditingController _newTaskController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() async {
+    try {
+      final file = File(await _getFilePath());
+      final contents = await file.readAsString();
+      setState(() {
+        tasks = (json.decode(contents) as List<dynamic>).cast<Map<String, dynamic>>();
+      });
+    } catch (e) {
+      // Error reading file, handle as needed
+    }
+  }
+
+  Future<void> _saveTasks() async {
+    final file = File(await _getFilePath());
+    final encodedTasks = json.encode(tasks);
+    await file.writeAsString(encodedTasks);
+  }
+
+  Future<String> _getFilePath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return '${directory.path}/tasks.json';
+  }
+
   void toggleTaskCompletion(int index) {
     setState(() {
-      taskCompleted[index] = !taskCompleted[index];
+      tasks[index]['completed'] = !tasks[index]['completed'];
     });
+    _saveTasks(); // Save tasks after toggling
   }
 
   void addNewTask(String newTask) {
     setState(() {
-      tasks.add(newTask);
-      taskCompleted.add(false);
+      tasks.add({'task': newTask, 'completed': false});
     });
+    _saveTasks(); // Save tasks after adding
   }
 
   @override
@@ -54,8 +78,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
-          String task = tasks[index];
-          bool isCompleted = taskCompleted[index];
+          String task = tasks[index]['task'];
+          bool isCompleted = tasks[index]['completed'];
 
           return Dismissible(
             key: UniqueKey(),
@@ -63,8 +87,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
             onDismissed: (direction) {
               setState(() {
                 tasks.removeAt(index);
-                taskCompleted.removeAt(index);
               });
+              _saveTasks(); // Save tasks after removing
             },
             child: ListTile(
               title: Text(
