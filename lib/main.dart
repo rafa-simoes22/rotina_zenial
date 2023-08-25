@@ -3,25 +3,25 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() => runApp(TodoApp());
+void main() => runApp(TaskListApp());
 
-class TodoApp extends StatelessWidget {
+class TaskListApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lista de Tarefas',
-      theme: ThemeData(primarySwatch: Colors.pink),
-      home: TodoList(),
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: TaskListScreen(),
     );
   }
 }
 
-class TodoList extends StatefulWidget {
+class TaskListScreen extends StatefulWidget {
   @override
-  _TodoListState createState() => _TodoListState();
+  _TaskListScreenState createState() => _TaskListScreenState();
 }
 
-class _TodoListState extends State<TodoList> {
+class _TaskListScreenState extends State<TaskListScreen> {
   List<Map<String, dynamic>> tasks = [];
 
   TextEditingController _newTaskController = TextEditingController();
@@ -76,71 +76,77 @@ class _TodoListState extends State<TodoList> {
     }
   }
 
-  void _deleteTask(int index) {
-    setState(() {
-      tasks.removeAt(index);
-    });
-    _saveTasks(); // Save tasks after deleting
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lista de Tarefas'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: tasks.length,
-              itemBuilder: (context, index) {
-                String task = tasks[index]['task'];
-                bool isCompleted = tasks[index]['completed'];
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          String task = tasks[index]['task'];
+          bool isCompleted = tasks[index]['completed'];
 
-                return Dismissible(
-                  key: UniqueKey(),
-                  onDismissed: (_) => _deleteTask(index),
-                  child: GestureDetector(
-                    onTap: () => _toggleTask(index),
-                    child: ListTile(
-                      title: Text(
-                        task,
-                        style: TextStyle(
-                          decoration: isCompleted
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _newTaskController,
-                    decoration: InputDecoration(
-                      hintText: 'Adicionar tarefa...',
-                    ),
+          return Dismissible(
+            key: UniqueKey(),
+            direction: DismissDirection.horizontal,
+            onDismissed: (direction) {
+              setState(() {
+                tasks.removeAt(index);
+              });
+              _saveTasks(); // Save tasks after removing
+            },
+            child: GestureDetector(
+              onTap: () => _toggleTask(index),
+              child: ListTile(
+                title: Text(
+                  task,
+                  style: TextStyle(
+                    decoration: isCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    _addTask(_newTaskController.text);
-                    _newTaskController.clear();
+                leading: Checkbox(
+                  value: isCompleted,
+                  onChanged: (value) {
+                    _toggleTask(index);
                   },
                 ),
-              ],
+                trailing: isCompleted ? Icon(Icons.check, color: Colors.green) : null,
+              ),
             ),
-          ),
-        ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Adicionar Tarefa'),
+                content: TextField(
+                  controller: _newTaskController,
+                  decoration: InputDecoration(labelText: 'Digite a nova tarefa'),
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _addTask(_newTaskController.text);
+                      _newTaskController.clear();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Adicionar'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        label: Text('Adicionar Tarefa'),
+        icon: Icon(Icons.add),
       ),
     );
   }
