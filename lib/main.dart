@@ -62,6 +62,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
       if (tasks[index]['completed']) {
         final completedTask = tasks.removeAt(index);
         tasks.add(completedTask);
+      } else {
+        final uncompletedTask = tasks.removeAt(index);
+        int insertIndex = tasks.indexWhere((task) => !task['completed']);
+        if (insertIndex == -1) {
+          tasks.add(uncompletedTask);
+        } else {
+          tasks.insert(insertIndex, uncompletedTask);
+        }
       }
     });
     _saveTasks(); // Save tasks after toggling
@@ -70,7 +78,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   void _addTask(String taskTitle) {
     if (taskTitle.isNotEmpty) {
       setState(() {
-        tasks.add({'task': taskTitle, 'completed': false});
+        tasks.insert(0, {'task': taskTitle, 'completed': false});
       });
       _saveTasks(); // Save tasks after adding
     }
