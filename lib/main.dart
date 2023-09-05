@@ -25,6 +25,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   List<Map<String, dynamic>> tasks = [];
 
   TextEditingController _newTaskController = TextEditingController();
+  String emojiDescription = ''; // Variável para armazenar a descrição do emoji selecionado
 
   @override
   void initState() {
@@ -84,45 +85,109 @@ class _TaskListScreenState extends State<TaskListScreen> {
     }
   }
 
+  void _showEmojiDescription(String emoji) {
+    setState(() {
+      switch (emoji) {
+        case '😃':
+          emojiDescription = 'Feliz';
+          break;
+        case '😢':
+          emojiDescription = 'Triste';
+          break;
+        case '😐':
+          emojiDescription = 'Normal';
+          break;
+        default:
+          emojiDescription = '';
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lista de Tarefas'),
       ),
-      body: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          String task = tasks[index]['task'];
-          bool isCompleted = tasks[index]['completed'];
-
-          return Dismissible(
-            key: UniqueKey(),
-            direction: DismissDirection.horizontal,
-            onDismissed: (direction) {
-              setState(() {
-                tasks.removeAt(index);
-                _saveTasks(); // Salve as tarefas após remover
-              });
-            },
-            child: GestureDetector(
-              onTap: () => _toggleTask(index),
-              child: ListTile(
-                title: Text(
-                  task,
-                  style: TextStyle(
-                    decoration: isCompleted
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showEmojiDescription('😃'); // Mostrar descrição feliz
+                  },
+                  child: Text(
+                    '😃',
+                    style: TextStyle(fontSize: 36.0),
                   ),
                 ),
-                trailing: isCompleted
-                    ? Icon(Icons.check, color: Colors.green)
-                    : null,
-              ),
+                GestureDetector(
+                  onTap: () {
+                    _showEmojiDescription('😢'); // Mostrar descrição triste
+                  },
+                  child: Text(
+                    '😢',
+                    style: TextStyle(fontSize: 36.0),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _showEmojiDescription('😐'); // Mostrar descrição normal
+                  },
+                  child: Text(
+                    '😐',
+                    style: TextStyle(fontSize: 36.0),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+          Text(
+            emojiDescription,
+            style: TextStyle(fontSize: 24.0),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                String task = tasks[index]['task'];
+                bool isCompleted = tasks[index]['completed'];
+
+                return Dismissible(
+                  key: UniqueKey(),
+                  direction: DismissDirection.horizontal,
+                  onDismissed: (direction) {
+                    setState(() {
+                      tasks.removeAt(index);
+                      _saveTasks(); // Salvar as tarefas após remover
+                    });
+                  },
+                  child: GestureDetector(
+                    onTap: () => _toggleTask(index),
+                    child: ListTile(
+                      title: Text(
+                        task,
+                        style: TextStyle(
+                          decoration: isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                      ),
+                      trailing: isCompleted
+                          ? Icon(Icons.check, color: Colors.green)
+                          : null,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
