@@ -102,8 +102,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
             onDismissed: (direction) {
               setState(() {
                 tasks.removeAt(index);
+                _saveTasks(); // Salve as tarefas após remover
               });
-              _saveTasks(); // Save tasks after removing
             },
             child: GestureDetector(
               onTap: () => _toggleTask(index),
@@ -116,7 +116,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         : TextDecoration.none,
                   ),
                 ),
-                trailing: isCompleted ? Icon(Icons.check, color: Colors.green) : null,
+                trailing: isCompleted
+                    ? Icon(Icons.check, color: Colors.green)
+                    : null,
               ),
             ),
           );
