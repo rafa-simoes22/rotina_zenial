@@ -89,13 +89,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
     setState(() {
       switch (emoji) {
         case '😃':
-          emojiDescription = 'Feliz';
+          emojiDescription = 'Aproveite cada momento de alegria, pois são esses momentos que fazem a vida valer a pena';
           break;
         case '😢':
-          emojiDescription = 'Triste';
+          emojiDescription = 'Lembre-se de que a tristeza é apenas uma nuvem passageira no céu da sua vida. O sol sempre volta a brilhar';
           break;
         case '😐':
-          emojiDescription = 'Normal';
+          emojiDescription = 'É completamente normal ter altos e baixos na vida. A jornada é feita de todos esses momentos, e todos eles têm seu valor';
           break;
         default:
           emojiDescription = '';
@@ -114,42 +114,55 @@ class _TaskListScreenState extends State<TaskListScreen> {
         children: [
           Container(
             padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            color: Theme.of(context).primaryColor, // Define a mesma cor da AppBar
+            child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    _showEmojiDescription('😃'); // Mostrar descrição feliz
-                  },
-                  child: Text(
-                    '😃',
-                    style: TextStyle(fontSize: 36.0),
+                Text(
+                  'Como você está se sentindo?',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.black, // Define a cor do texto para branco
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _showEmojiDescription('😢'); // Mostrar descrição triste
-                  },
-                  child: Text(
-                    '😢',
-                    style: TextStyle(fontSize: 36.0),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _showEmojiDescription('😐'); // Mostrar descrição normal
-                  },
-                  child: Text(
-                    '😐',
-                    style: TextStyle(fontSize: 36.0),
-                  ),
+                SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _showEmojiDescription('😃'); // Mostrar descrição feliz
+                      },
+                      child: Text(
+                        '😃',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showEmojiDescription('😢'); // Mostrar descrição triste
+                      },
+                      child: Text(
+                        '😢',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showEmojiDescription('😐'); // Mostrar descrição normal
+                      },
+                      child: Text(
+                        '😐',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           Text(
             emojiDescription,
-            style: TextStyle(fontSize: 24.0),
+            style: TextStyle(fontSize: 15.0),
           ),
           Expanded(
             child: ListView.builder(
