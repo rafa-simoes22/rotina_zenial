@@ -123,6 +123,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     fontSize: 24.0,
                     color: Colors.black, // Define a cor do texto para branco
                   ),
+                  textAlign: TextAlign.center, // Centraliza o texto
                 ),
                 SizedBox(height: 10.0),
                 Row(
@@ -163,6 +164,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
           Text(
             emojiDescription,
             style: TextStyle(fontSize: 15.0),
+            textAlign: TextAlign.center, // Centraliza o texto
           ),
           Expanded(
             child: ListView.builder(
