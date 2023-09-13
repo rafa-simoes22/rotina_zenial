@@ -1,4 +1,37 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+
+class Tarefa {
+  String titulo;
+  String descricao;
+  String dataVencimento;
+  String prioridade;
+
+  Tarefa({
+    required this.titulo,
+    required this.descricao,
+    required this.dataVencimento,
+    required this.prioridade,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'titulo': titulo,
+      'descricao': descricao,
+      'dataVencimento': dataVencimento,
+      'prioridade': prioridade,
+    };
+  }
+
+  factory Tarefa.fromJson(Map<String, dynamic> json) {
+    return Tarefa(
+      titulo: json['titulo'],
+      descricao: json['descricao'],
+      dataVencimento: json['dataVencimento'],
+      prioridade: json['prioridade'],
+    );
+  }
+}
 
 void main() {
   runApp(TarefasApp());
@@ -16,8 +49,16 @@ class _TarefasAppState extends State<TarefasApp> {
   String _prioridadeSelecionada = 'Alto';
 
   void _adicionarTarefa() {
-    // Aqui você pode lidar com a lógica para adicionar tarefas
-    // Os valores estão disponíveis nos controladores (_tituloController, _descricaoController, etc.)
+    Tarefa novaTarefa = Tarefa(
+      titulo: _tituloController.text,
+      descricao: _descricaoController.text,
+      dataVencimento: _dataVencimentoController.text,
+      prioridade: _prioridadeSelecionada,
+    );
+
+    String tarefaJson = jsonEncode(novaTarefa);
+
+    Navigator.of(context).pop(tarefaJson); // Passa os dados de volta para a tela principal
   }
 
   @override

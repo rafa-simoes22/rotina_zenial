@@ -1,5 +1,38 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'adicionar_tarefa.dart';
+
+class Tarefa {
+  String titulo;
+  String descricao;
+  String dataVencimento;
+  String prioridade;
+
+  Tarefa({
+    required this.titulo,
+    required this.descricao,
+    required this.dataVencimento,
+    required this.prioridade,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'titulo': titulo,
+      'descricao': descricao,
+      'dataVencimento': dataVencimento,
+      'prioridade': prioridade,
+    };
+  }
+
+  factory Tarefa.fromJson(Map<String, dynamic> json) {
+    return Tarefa(
+      titulo: json['titulo'],
+      descricao: json['descricao'],
+      dataVencimento: json['dataVencimento'],
+      prioridade: json['prioridade'],
+    );
+  }
+}
 
 void main() {
   runApp(MyApp());
@@ -14,23 +47,46 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TelaPrincipal extends StatelessWidget {
+class TelaPrincipal extends StatefulWidget {
+  @override
+  _TelaPrincipalState createState() => _TelaPrincipalState();
+}
+
+class _TelaPrincipalState extends State<TelaPrincipal> {
+  List<Tarefa> tarefas = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tarefas App'),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navegar para a tela de adicionar tarefa quando o botão for pressionado
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => TarefasApp(), // Usando TarefasApp para a tela de adicionar tarefa
-            ));
-          },
-          child: Text('Adicionar Tarefa'),
-        ),
+      body: ListView.builder(
+        itemCount: tarefas.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(tarefas[index].titulo),
+            subtitle: Text(tarefas[index].descricao),
+            // Exibir outras informações da tarefa aqui
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final tarefaJson = await Navigator.of(context).push<String>(
+            MaterialPageRoute(
+              builder: (context) => TarefasApp(),
+            ),
+          );
+
+          if (tarefaJson != null) {
+            Tarefa novaTarefa = Tarefa.fromJson(jsonDecode(tarefaJson));
+            setState(() {
+              tarefas.add(novaTarefa);
+            });
+          }
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
