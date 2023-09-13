@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Tarefa {
   String titulo;
@@ -83,6 +84,11 @@ class _TarefasAppState extends State<TarefasApp> {
               ),
               TextFormField(
                 controller: _dataVencimentoController,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10), // Limita o comprimento máximo
+                  DataInputFormatter(), // Formata a data com barras
+                ],
+                keyboardType: TextInputType.number, // Define o teclado como numérico
                 decoration: InputDecoration(labelText: 'Data de Vencimento (DD/MM/AAAA)'),
               ),
               DropdownButtonFormField<String>(
@@ -111,6 +117,36 @@ class _TarefasAppState extends State<TarefasApp> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DataInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final StringBuffer newText = StringBuffer();
+    final String trimmedValue = newValue.text.replaceAll("/", "");
+
+    if (trimmedValue.length >= 2) {
+      newText.write(trimmedValue.substring(0, 2) + '/');
+      if (trimmedValue.length >= 4) {
+        newText.write(trimmedValue.substring(2, 4) + '/');
+        if (trimmedValue.length >= 8) {
+          newText.write(trimmedValue.substring(4, 8));
+        } else {
+          newText.write(trimmedValue.substring(4));
+        }
+      } else {
+        newText.write(trimmedValue.substring(2));
+      }
+    } else {
+      newText.write(trimmedValue);
+    }
+
+    return TextEditingValue(
+      text: newText.toString(),
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }
