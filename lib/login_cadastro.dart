@@ -23,11 +23,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
 
   Future<void> _login(BuildContext context) async {
+    final String username = nameController.text;
+    final String password = passwordController.text;
+
     final database = await openDatabase(
       join(await getDatabasesPath(), 'user_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
+          'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
         );
       },
       version: 1,
@@ -36,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
     final List<Map<String, dynamic>> users = await database.query(
       'users',
       where: 'name = ? AND password = ?',
-      whereArgs: [nameController.text, passwordController.text],
+      whereArgs: [username, password],
     );
 
     if (users.isNotEmpty) {
@@ -48,9 +51,16 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
       );
     }
+
+    // Limpar os campos após a tentativa de login
+    nameController.clear();
+    passwordController.clear();
   }
 
   Future<void> _register(BuildContext context) async {
+    final String username = nameController.text;
+    final String password = passwordController.text;
+
     final database = await openDatabase(
       join(await getDatabasesPath(), 'user_database.db'),
       onCreate: (db, version) {
@@ -61,26 +71,28 @@ class _LoginPageState extends State<LoginPage> {
       version: 1,
     );
 
-    // Verifica se o usuário já existe antes de inserir
     final List<Map<String, dynamic>> existingUsers = await database.query(
       'users',
       where: 'name = ?',
-      whereArgs: [nameController.text],
+      whereArgs: [username],
     );
 
     if (existingUsers.isEmpty) {
-      // Se não existir um usuário com o mesmo nome, insira o novo usuário
       await database.insert(
         'users',
         {
-          'name': nameController.text,
-          'password': passwordController.text,
+          'name': username,
+          'password': password,
         },
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Cadastro realizado com sucesso')),
       );
+
+      // Limpar os campos após o registro
+      nameController.clear();
+      passwordController.clear();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
