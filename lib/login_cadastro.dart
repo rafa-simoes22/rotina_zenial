@@ -55,24 +55,37 @@ class _LoginPageState extends State<LoginPage> {
       join(await getDatabasesPath(), 'user_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
+          'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
         );
       },
       version: 1,
     );
 
-    await database.insert(
+    // Verifica se o usuário já existe antes de inserir
+    final List<Map<String, dynamic>> existingUsers = await database.query(
       'users',
-      {
-        'name': nameController.text,
-        'password': passwordController.text,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'name = ?',
+      whereArgs: [nameController.text],
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Cadastro realizado com sucesso')),
-    );
+    if (existingUsers.isEmpty) {
+      // Se não existir um usuário com o mesmo nome, insira o novo usuário
+      await database.insert(
+        'users',
+        {
+          'name': nameController.text,
+          'password': passwordController.text,
+        },
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Cadastro realizado com sucesso')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
+      );
+    }
   }
 
   @override
@@ -105,11 +118,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () => _login(context), // Passe o contexto aqui
+              onPressed: () => _login(context),
               child: Text('Login'),
             ),
             ElevatedButton(
-              onPressed: () => _register(context), // Passe o contexto aqui
+              onPressed: () => _register(context),
               child: Text('Cadastro'),
             ),
           ],
