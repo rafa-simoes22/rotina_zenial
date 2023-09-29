@@ -83,14 +83,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 
   @override
   Widget build(BuildContext context) {
-    tarefas.sort((a, b) {
-      if (ordenarPorData) {
-        return a.dataVencimento.compareTo(b.dataVencimento);
-      } else {
-        return _compararPrioridades(a.prioridade, b.prioridade);
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Tarefas App'),
@@ -100,6 +92,8 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: () {
               setState(() {
                 ordenarPorData = true;
+                // Aplicar a lógica de ordenação por data aqui
+                tarefas.sort((a, b) => a.dataVencimento.compareTo(b.dataVencimento));
               });
             },
           ),
@@ -108,35 +102,50 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: () {
               setState(() {
                 ordenarPorData = false;
+                // Aplicar a lógica de ordenação por prioridade aqui
+                tarefas.sort((a, b) => _compararPrioridades(a.prioridade, b.prioridade));
               });
             },
           ),
         ],
       ),
-      body: ListView.builder(
+      body: ReorderableListView.builder(
+        padding: EdgeInsets.symmetric(vertical: 8.0), // Adiciona padding
         itemCount: tarefas.length,
         itemBuilder: (context, index) {
+          final tarefa = tarefas[index];
           return Card(
+            key: Key(tarefa.titulo),
+            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adiciona margem ao Card
             child: ListTile(
-              title: Text(tarefas[index].titulo),
+              title: Text(tarefa.titulo),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-            Text(tarefas[index].titulo),
-            Text(tarefas[index].prioridade),
-            Text(tarefas[index].dataVencimento),
-            // Adicione mais informações aqui, se desejar
-          ],
-        ),
+                  Text(tarefa.prioridade),
+                  Text(tarefa.dataVencimento),
+                  // Adicione mais informações aqui, se desejar
+                ],
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => DetalhesTarefa(tarefa: tarefas[index]),
+                    builder: (context) => DetalhesTarefa(tarefa: tarefa),
                   ),
                 );
               },
             ),
           );
+        },
+        onReorder: (oldIndex, newIndex) {
+          setState(() {
+            if (newIndex > oldIndex) {
+              newIndex -= 1;
+            }
+            final Tarefa tarefa = tarefas.removeAt(oldIndex);
+            tarefas.insert(newIndex, tarefa);
+            _salvarTarefas(); // Salvar as tarefas após reordená-las
+          });
         },
       ),
       floatingActionButton: FloatingActionButton(
