@@ -64,16 +64,18 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
       body: ListView.builder(
         itemCount: tarefas.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(tarefas[index].titulo),
-            subtitle: Text(tarefas[index].descricao),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DetalhesTarefa(tarefa: tarefas[index]),
-                ),
-              );
-            },
+          return Card( // Adicione um Card em volta do conteúdo da tarefa
+            child: ListTile(
+              title: Text(tarefas[index].titulo),
+              subtitle: Text(tarefas[index].descricao),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => DetalhesTarefa(tarefa: tarefas[index]),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
