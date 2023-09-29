@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'tarefa.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,6 +46,13 @@ class _LoginPageState extends State<LoginPage> {
     if (users.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login bem-sucedido')),
+      );
+
+      // Navegar para a tela de tarefas após o login bem-sucedido
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => TelaPrincipal(),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
