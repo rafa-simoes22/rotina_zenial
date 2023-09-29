@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Importe o pacote shared_preferences
 import 'adicionar_tarefa.dart';
 
 class Tarefa {
@@ -58,9 +59,30 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   // Variável para controlar a ordem de classificação
   bool ordenarPorData = false;
 
+  // Variável para SharedPreferences
+  late SharedPreferences _prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    _carregarTarefasSalvas();
+  }
+
+  Future<void> _carregarTarefasSalvas() async {
+    _prefs = await SharedPreferences.getInstance();
+    final tarefasJson = _prefs.getStringList('tarefas') ?? [];
+    setState(() {
+      tarefas = tarefasJson.map((json) => Tarefa.fromJson(jsonDecode(json))).toList();
+    });
+  }
+
+  Future<void> _salvarTarefas() async {
+    final tarefasJson = tarefas.map((tarefa) => jsonEncode(tarefa.toJson())).toList();
+    await _prefs.setStringList('tarefas', tarefasJson);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Ordena as tarefas com base na escolha atual (data ou prioridade)
     tarefas.sort((a, b) {
       if (ordenarPorData) {
         return a.dataVencimento.compareTo(b.dataVencimento);
@@ -73,7 +95,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
       appBar: AppBar(
         title: Text('Tarefas App'),
         actions: [
-          // Botão para ordenar por data
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () {
@@ -82,7 +103,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
               });
             },
           ),
-          // Botão para ordenar por prioridade
           IconButton(
             icon: Icon(Icons.priority_high),
             onPressed: () {
@@ -124,6 +144,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             setState(() {
               tarefas.add(novaTarefa);
             });
+            await _salvarTarefas(); // Salvar as tarefas após adicioná-las
           }
         },
         child: Icon(Icons.add),
@@ -132,8 +153,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   }
 
   int _compararPrioridades(String prioridadeA, String prioridadeB) {
-    // Implemente a lógica para comparar as prioridades
-    // Retorne um número negativo se A for menor que B, 0 se forem iguais e um número positivo se A for maior que B.
     if (prioridadeA == 'Alto') {
       return -1;
     } else if (prioridadeA == 'Médio') {
@@ -143,7 +162,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         return -1;
       }
     } else {
-      // Baixo
       if (prioridadeB == 'Alto' || prioridadeB == 'Médio') {
         return 1;
       } else {
