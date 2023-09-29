@@ -128,11 +128,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 ],
               ),
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DetalhesTarefa(tarefa: tarefa),
-                  ),
-                );
+                _mostrarOpcoes(context, tarefa);
               },
             ),
           );
@@ -185,6 +181,43 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         return 0;
       }
     }
+  }
+
+  void _mostrarOpcoes(BuildContext context, Tarefa tarefa) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text('Detalhes da Tarefa'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => DetalhesTarefa(tarefa: tarefa),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete),
+                title: Text('Excluir Tarefa'),
+                onTap: () {
+                  setState(() {
+                    tarefas.remove(tarefa);
+                    _salvarTarefas();
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
