@@ -55,16 +55,48 @@ class TelaPrincipal extends StatefulWidget {
 class _TelaPrincipalState extends State<TelaPrincipal> {
   List<Tarefa> tarefas = [];
 
+  // Variável para controlar a ordem de classificação
+  bool ordenarPorData = false;
+
   @override
   Widget build(BuildContext context) {
+    // Ordena as tarefas com base na escolha atual (data ou prioridade)
+    tarefas.sort((a, b) {
+      if (ordenarPorData) {
+        return a.dataVencimento.compareTo(b.dataVencimento);
+      } else {
+        return _compararPrioridades(a.prioridade, b.prioridade);
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Tarefas App'),
+        actions: [
+          // Botão para ordenar por data
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () {
+              setState(() {
+                ordenarPorData = true;
+              });
+            },
+          ),
+          // Botão para ordenar por prioridade
+          IconButton(
+            icon: Icon(Icons.priority_high),
+            onPressed: () {
+              setState(() {
+                ordenarPorData = false;
+              });
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: tarefas.length,
         itemBuilder: (context, index) {
-          return Card( // Adicione um Card em volta do conteúdo da tarefa
+          return Card(
             child: ListTile(
               title: Text(tarefas[index].titulo),
               subtitle: Text(tarefas[index].descricao),
@@ -97,6 +129,27 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  int _compararPrioridades(String prioridadeA, String prioridadeB) {
+    // Implemente a lógica para comparar as prioridades
+    // Retorne um número negativo se A for menor que B, 0 se forem iguais e um número positivo se A for maior que B.
+    if (prioridadeA == 'Alto') {
+      return -1;
+    } else if (prioridadeA == 'Médio') {
+      if (prioridadeB == 'Alto') {
+        return 1;
+      } else {
+        return -1;
+      }
+    } else {
+      // Baixo
+      if (prioridadeB == 'Alto' || prioridadeB == 'Médio') {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
   }
 }
 
