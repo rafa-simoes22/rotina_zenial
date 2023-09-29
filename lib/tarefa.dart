@@ -122,7 +122,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-            Text(tarefas[index].titulo),
             Text(tarefas[index].prioridade),
             Text(tarefas[index].dataVencimento),
             // Adicione mais informações aqui, se desejar
