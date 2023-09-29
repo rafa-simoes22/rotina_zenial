@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Importe o pacote shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 import 'adicionar_tarefa.dart';
 
 class Tarefa {
@@ -119,7 +119,15 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           return Card(
             child: ListTile(
               title: Text(tarefas[index].titulo),
-              subtitle: Text(tarefas[index].descricao),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+            Text(tarefas[index].titulo),
+            Text(tarefas[index].prioridade),
+            Text(tarefas[index].dataVencimento),
+            // Adicione mais informações aqui, se desejar
+          ],
+        ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
