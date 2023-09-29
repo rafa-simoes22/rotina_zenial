@@ -35,8 +35,11 @@ class Tarefa {
 }
 
 void main() {
-  runApp(TarefasApp());
+  runApp(MaterialApp(
+    home: TarefasApp(),
+  ));
 }
+
 
 class TarefasApp extends StatefulWidget {
   @override
@@ -50,17 +53,41 @@ class _TarefasAppState extends State<TarefasApp> {
   String _prioridadeSelecionada = 'Alto';
 
   void _adicionarTarefa() {
-    Tarefa novaTarefa = Tarefa(
-      titulo: _tituloController.text,
-      descricao: _descricaoController.text,
-      dataVencimento: _dataVencimentoController.text,
-      prioridade: _prioridadeSelecionada,
+  // Verifique se a entrada de data de vencimento contém apenas números e barras.
+  final RegExp dateRegex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+  if (!dateRegex.hasMatch(_dataVencimentoController.text)) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
     );
-
-    String tarefaJson = jsonEncode(novaTarefa);
-
-    Navigator.of(context).pop(tarefaJson); // Passa os dados de volta para a tela principal
+    return; // Não cria a Tarefa se a data for inválida.
   }
+
+  Tarefa novaTarefa = Tarefa(
+    titulo: _tituloController.text,
+    descricao: _descricaoController.text,
+    dataVencimento: _dataVencimentoController.text,
+    prioridade: _prioridadeSelecionada,
+  );
+
+  String tarefaJson = jsonEncode(novaTarefa);
+
+  Navigator.of(context).pop(tarefaJson); // Passa os dados de volta para a tela principal
+}
+
 
   @override
   Widget build(BuildContext context) {
