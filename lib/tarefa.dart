@@ -67,7 +67,13 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           return ListTile(
             title: Text(tarefas[index].titulo),
             subtitle: Text(tarefas[index].descricao),
-            // Exibir outras informações da tarefa aqui
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DetalhesTarefa(tarefa: tarefas[index]),
+                ),
+              );
+            },
           );
         },
       ),
@@ -87,6 +93,36 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           }
         },
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class DetalhesTarefa extends StatelessWidget {
+  final Tarefa tarefa;
+
+  DetalhesTarefa({required this.tarefa});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalhes da Tarefa'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Título: ${tarefa.titulo}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text('Descrição: ${tarefa.descricao}'),
+            Text('Data de Vencimento: ${tarefa.dataVencimento}'),
+            Text('Prioridade: ${tarefa.prioridade}'),
+          ],
+        ),
       ),
     );
   }
