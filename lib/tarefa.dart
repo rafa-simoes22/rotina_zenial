@@ -75,12 +75,14 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     _prefs = await SharedPreferences.getInstance();
     final tarefasJson = _prefs.getStringList('tarefas') ?? [];
     setState(() {
-      tarefas = tarefasJson.map((json) => Tarefa.fromJson(jsonDecode(json))).toList();
+      tarefas =
+          tarefasJson.map((json) => Tarefa.fromJson(jsonDecode(json))).toList();
     });
   }
 
   Future<void> _salvarTarefas() async {
-    final tarefasJson = tarefas.map((tarefa) => jsonEncode(tarefa.toJson())).toList();
+    final tarefasJson =
+        tarefas.map((tarefa) => jsonEncode(tarefa.toJson())).toList();
     await _prefs.setStringList('tarefas', tarefasJson);
   }
 
@@ -265,11 +267,11 @@ class DetalhesTarefa extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Título: ${tarefa.titulo}',
+              tarefa.titulo,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text('Descrição: ${tarefa.descricao}'),
-            Text('Data de Vencimento: ${tarefa.dataVencimento}'),
+            Text('Vencimento: ${tarefa.dataVencimento}'),
             Text('Prioridade: ${tarefa.prioridade}'),
             Text('Concluída: ${tarefa.concluida ? 'Sim' : 'Não'}'),
           ],
