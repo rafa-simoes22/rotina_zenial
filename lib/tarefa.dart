@@ -8,12 +8,14 @@ class Tarefa {
   String descricao;
   String dataVencimento;
   String prioridade;
+  bool concluida;
 
   Tarefa({
     required this.titulo,
     required this.descricao,
     required this.dataVencimento,
     required this.prioridade,
+    this.concluida = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,7 @@ class Tarefa {
       'descricao': descricao,
       'dataVencimento': dataVencimento,
       'prioridade': prioridade,
+      'concluida': concluida,
     };
   }
 
@@ -31,6 +34,7 @@ class Tarefa {
       descricao: json['descricao'],
       dataVencimento: json['dataVencimento'],
       prioridade: json['prioridade'],
+      concluida: json['concluida'] ?? false,
     );
   }
 }
@@ -56,10 +60,9 @@ class TelaPrincipal extends StatefulWidget {
 class _TelaPrincipalState extends State<TelaPrincipal> {
   List<Tarefa> tarefas = [];
 
-  // Variável para controlar a ordem de classificação
   bool ordenarPorData = false;
+  bool ordenarPorPrioridade = false;
 
-  // Variável para SharedPreferences
   late SharedPreferences _prefs;
 
   @override
@@ -85,15 +88,23 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tarefas App'),
+        title: Text('Rotina Zenial'),
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () {
               setState(() {
                 ordenarPorData = true;
-                // Aplicar a lógica de ordenação por data aqui
-                tarefas.sort((a, b) => a.dataVencimento.compareTo(b.dataVencimento));
+                ordenarPorPrioridade = false;
+                tarefas.sort((a, b) {
+                  if (a.concluida && !b.concluida) {
+                    return 1;
+                  } else if (!a.concluida && b.concluida) {
+                    return -1;
+                  } else {
+                    return a.dataVencimento.compareTo(b.dataVencimento);
+                  }
+                });
               });
             },
           ),
@@ -102,21 +113,29 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: () {
               setState(() {
                 ordenarPorData = false;
-                // Aplicar a lógica de ordenação por prioridade aqui
-                tarefas.sort((a, b) => _compararPrioridades(a.prioridade, b.prioridade));
+                ordenarPorPrioridade = true;
+                tarefas.sort((a, b) {
+                  if (a.concluida && !b.concluida) {
+                    return 1;
+                  } else if (!a.concluida && b.concluida) {
+                    return -1;
+                  } else {
+                    return _compararPrioridades(a.prioridade, b.prioridade);
+                  }
+                });
               });
             },
           ),
         ],
       ),
       body: ReorderableListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 8.0), // Adiciona padding
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         itemCount: tarefas.length,
         itemBuilder: (context, index) {
           final tarefa = tarefas[index];
           return Card(
             key: Key(tarefa.titulo),
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Adiciona margem ao Card
+            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             child: ListTile(
               title: Text(tarefa.titulo),
               subtitle: Column(
@@ -124,8 +143,16 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 children: [
                   Text(tarefa.prioridade),
                   Text(tarefa.dataVencimento),
-                  // Adicione mais informações aqui, se desejar
                 ],
+              ),
+              trailing: Checkbox(
+                value: tarefa.concluida,
+                onChanged: (value) {
+                  setState(() {
+                    tarefa.concluida = value ?? false;
+                    _salvarTarefas();
+                  });
+                },
               ),
               onTap: () {
                 _mostrarOpcoes(context, tarefa);
@@ -140,7 +167,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             }
             final Tarefa tarefa = tarefas.removeAt(oldIndex);
             tarefas.insert(newIndex, tarefa);
-            _salvarTarefas(); // Salvar as tarefas após reordená-las
+            _salvarTarefas();
           });
         },
       ),
@@ -157,7 +184,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             setState(() {
               tarefas.add(novaTarefa);
             });
-            await _salvarTarefas(); // Salvar as tarefas após adicioná-las
+            await _salvarTarefas();
           }
         },
         child: Icon(Icons.add),
@@ -244,6 +271,7 @@ class DetalhesTarefa extends StatelessWidget {
             Text('Descrição: ${tarefa.descricao}'),
             Text('Data de Vencimento: ${tarefa.dataVencimento}'),
             Text('Prioridade: ${tarefa.prioridade}'),
+            Text('Concluída: ${tarefa.concluida ? 'Sim' : 'Não'}'),
           ],
         ),
       ),
