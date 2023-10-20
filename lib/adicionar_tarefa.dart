@@ -40,7 +40,6 @@ void main() {
   ));
 }
 
-
 class TarefasApp extends StatefulWidget {
   @override
   _TarefasAppState createState() => _TarefasAppState();
@@ -53,41 +52,68 @@ class _TarefasAppState extends State<TarefasApp> {
   String _prioridadeSelecionada = 'Alto';
 
   void _adicionarTarefa() {
-  // Verifique se a entrada de data de vencimento contém apenas números e barras.
-  final RegExp dateRegex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
-  if (!dateRegex.hasMatch(_dataVencimentoController.text)) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Erro de Data'),
-          content: Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+    final RegExp dateRegex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+    
+    if (!dateRegex.hasMatch(_dataVencimentoController.text)) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro de Data'),
+            content: Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    final DateTime dataAtual = DateTime.now();
+    final List<String> dataVencimentoParts = _dataVencimentoController.text.split('/');
+    final int dia = int.parse(dataVencimentoParts[0]);
+    final int mes = int.parse(dataVencimentoParts[1]);
+    final int ano = int.parse(dataVencimentoParts[2]);
+    final DateTime dataVencimento = DateTime(ano, mes, dia);
+
+    if (dataVencimento.isBefore(dataAtual)) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro de Data'),
+            content: Text('A data de vencimento não pode ser anterior à data atual.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    Tarefa novaTarefa = Tarefa(
+      titulo: _tituloController.text,
+      descricao: _descricaoController.text,
+      dataVencimento: _dataVencimentoController.text,
+      prioridade: _prioridadeSelecionada,
     );
-    return; // Não cria a Tarefa se a data for inválida.
+
+    String tarefaJson = jsonEncode(novaTarefa);
+
+    Navigator.of(context).pop(tarefaJson);
   }
-
-  Tarefa novaTarefa = Tarefa(
-    titulo: _tituloController.text,
-    descricao: _descricaoController.text,
-    dataVencimento: _dataVencimentoController.text,
-    prioridade: _prioridadeSelecionada,
-  );
-
-  String tarefaJson = jsonEncode(novaTarefa);
-
-  Navigator.of(context).pop(tarefaJson); // Passa os dados de volta para a tela principal
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +138,10 @@ class _TarefasAppState extends State<TarefasApp> {
               TextFormField(
                 controller: _dataVencimentoController,
                 inputFormatters: [
-                  LengthLimitingTextInputFormatter(10), // Limita o comprimento máximo
-                  DataInputFormatter(), // Formata a data com barras
+                  LengthLimitingTextInputFormatter(10),
+                  DataInputFormatter(),
                 ],
-                keyboardType: TextInputType.number, // Define o teclado como numérico
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Data de Vencimento (DD/MM/AAAA)'),
               ),
               DropdownButtonFormField<String>(
