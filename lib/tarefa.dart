@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'adicionar_tarefa.dart';
+import 'editar.dart';
 
 class Tarefa {
   String titulo;
@@ -118,6 +119,26 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         }
       });
     });
+  }
+
+  void _mostrarTelaEditar(BuildContext context, Tarefa tarefa) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditarTarefa(
+          tarefa: tarefa,
+          atualizarTarefa: (tarefaAtualizada) {
+            // Atualize a tarefa na lista
+            final index = tarefas.indexOf(tarefa);
+            if (index != -1) {
+              setState(() {
+                tarefas[index] = tarefaAtualizada;
+                _salvarTarefas();
+              });
+            }
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -247,6 +268,14 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                   );
                 },
               ),
+              ListTile(
+              leading: Icon(Icons.edit), // Adicione um ícone de edição
+              title: Text('Editar Tarefa'), // Altere o texto do botão
+              onTap: () {
+                Navigator.of(context).pop();
+                _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
+              },
+            ),
               ListTile(
                 leading: Icon(Icons.delete),
                 title: Text('Excluir Tarefa'),
