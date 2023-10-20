@@ -4,8 +4,9 @@ import 'tarefa.dart';
 
 class EditarTarefa extends StatefulWidget {
   final Tarefa tarefa;
+  final Function(Tarefa) atualizarTarefa; // Adicionado novo parâmetro
 
-  EditarTarefa({required this.tarefa});
+  EditarTarefa({required this.tarefa, required this.atualizarTarefa});
 
   @override
   _EditarTarefaState createState() => _EditarTarefaState();
@@ -62,8 +63,8 @@ class _EditarTarefaState extends State<EditarTarefa> {
                 widget.tarefa.dataVencimento = dataVencimentoController.text;
                 widget.tarefa.prioridade = prioridadeController.text;
 
-                // Salvar as alterações
-                _salvarAlteracoes(widget.tarefa);
+                // Chame a função para atualizar a tarefa no arquivo principal
+                widget.atualizarTarefa(widget.tarefa);
 
                 Navigator.of(context)
                     .pop(); // Voltar à tela de detalhes da tarefa
@@ -74,11 +75,5 @@ class _EditarTarefaState extends State<EditarTarefa> {
         ),
       ),
     );
-  }
-
-  void _salvarAlteracoes(Tarefa tarefa) {
-    // Você pode implementar a lógica para salvar as alterações da tarefa aqui.
-    // Por exemplo, você pode atualizar uma lista de tarefas no arquivo tarefa.dart
-    // ou fazer outra operação de salvamento de acordo com sua necessidade.
   }
 }
