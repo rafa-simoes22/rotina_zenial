@@ -88,11 +88,53 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     await _prefs.setStringList('tarefas', tarefasJson);
   }
 
+  void _ordernarTarefasPorData() {
+    setState(() {
+      ordenarPorData = true;
+      ordenarPorPrioridade = false;
+      tarefas.sort((a, b) {
+        if (a.concluida && !b.concluida) {
+          return 1;
+        } else if (!a.concluida && b.concluida) {
+          return -1;
+        } else {
+          return a.dataVencimento.compareTo(b.dataVencimento);
+        }
+      });
+    });
+  }
+
+  void _ordernarTarefasPorPrioridade() {
+    setState(() {
+      ordenarPorData = false;
+      ordenarPorPrioridade = true;
+      tarefas.sort((a, b) {
+        if (a.concluida && !b.concluida) {
+          return 1;
+        } else if (!a.concluida && b.concluida) {
+          return -1;
+        } else {
+          return _compararPrioridades(a.prioridade, b.prioridade);
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rotina Zenial'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: _ordernarTarefasPorData,
+          ),
+          IconButton(
+            icon: Icon(Icons.priority_high),
+            onPressed: _ordernarTarefasPorPrioridade,
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
