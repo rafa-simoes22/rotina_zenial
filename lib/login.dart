@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'tarefa.dart';
+import 'tarefa.dart'; // Importe a tela principal
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       // Navegar para a tela de tarefas após o login bem-sucedido
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => TelaPrincipal(),
+          builder: (context) => TelaPrincipal(username: username), // Passe o nome de usuário
         ),
       );
     } else {

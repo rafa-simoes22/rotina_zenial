@@ -47,12 +47,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TelaPrincipal(),
+      home: TelaPrincipal(username: ""), // Inicializa com nome de usuário vazio
     );
   }
 }
 
 class TelaPrincipal extends StatefulWidget {
+  final String username; // Adiciona um parâmetro para o nome de usuário
+
+  TelaPrincipal({required this.username}); // Construtor
+
   @override
   _TelaPrincipalState createState() => _TelaPrincipalState();
 }
@@ -89,87 +93,59 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rotina Zenial'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () {
-              setState(() {
-                ordenarPorData = true;
-                ordenarPorPrioridade = false;
-                tarefas.sort((a, b) {
-                  if (a.concluida && !b.concluida) {
-                    return 1;
-                  } else if (!a.concluida && b.concluida) {
-                    return -1;
-                  } else {
-                    return a.dataVencimento.compareTo(b.dataVencimento);
-                  }
-                });
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.priority_high),
-            onPressed: () {
-              setState(() {
-                ordenarPorData = false;
-                ordenarPorPrioridade = true;
-                tarefas.sort((a, b) {
-                  if (a.concluida && !b.concluida) {
-                    return 1;
-                  } else if (!a.concluida && b.concluida) {
-                    return -1;
-                  } else {
-                    return _compararPrioridades(a.prioridade, b.prioridade);
-                  }
-                });
-              });
-            },
-          ),
-        ],
       ),
-      body: ReorderableListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        itemCount: tarefas.length,
-        itemBuilder: (context, index) {
-          final tarefa = tarefas[index];
-          return Card(
-            key: Key(tarefa.titulo),
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            child: ListTile(
-              title: Text(tarefa.titulo),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(tarefa.prioridade),
-                  Text(tarefa.dataVencimento),
-                ],
-              ),
-              trailing: Checkbox(
-                value: tarefa.concluida,
-                onChanged: (value) {
-                  setState(() {
-                    tarefa.concluida = value ?? false;
-                    _salvarTarefas();
-                  });
-                },
-              ),
-              onTap: () {
-                _mostrarOpcoes(context, tarefa);
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text('Olá, ${widget.username}! Aqui estão suas tarefas:'),
+          ),
+          Expanded(
+            child: ReorderableListView.builder(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              itemCount: tarefas.length,
+              itemBuilder: (context, index) {
+                final tarefa = tarefas[index];
+                return Card(
+                  key: Key(tarefa.titulo),
+                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: ListTile(
+                    title: Text(tarefa.titulo),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(tarefa.prioridade),
+                        Text(tarefa.dataVencimento),
+                      ],
+                    ),
+                    trailing: Checkbox(
+                      value: tarefa.concluida,
+                      onChanged: (value) {
+                        setState(() {
+                          tarefa.concluida = value ?? false;
+                          _salvarTarefas();
+                        });
+                      },
+                    ),
+                    onTap: () {
+                      _mostrarOpcoes(context, tarefa);
+                    },
+                  ),
+                );
+              },
+              onReorder: (oldIndex, newIndex) {
+                setState(() {
+                  if (newIndex > oldIndex) {
+                    newIndex -= 1;
+                  }
+                  final Tarefa tarefa = tarefas.removeAt(oldIndex);
+                  tarefas.insert(newIndex, tarefa);
+                  _salvarTarefas();
+                });
               },
             ),
-          );
-        },
-        onReorder: (oldIndex, newIndex) {
-          setState(() {
-            if (newIndex > oldIndex) {
-              newIndex -= 1;
-            }
-            final Tarefa tarefa = tarefas.removeAt(oldIndex);
-            tarefas.insert(newIndex, tarefa);
-            _salvarTarefas();
-          });
-        },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
