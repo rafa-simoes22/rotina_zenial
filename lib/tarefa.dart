@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'adicionar_tarefa.dart';
 import 'editar.dart';
+import 'materia.dart';
 
 class Tarefa {
   String titulo;
@@ -155,6 +156,16 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             icon: Icon(Icons.priority_high),
             onPressed: _ordernarTarefasPorPrioridade,
           ),
+          ElevatedButton( // Botão para ver as Matérias
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MateriaPage(),
+                ),
+              );
+            },
+            child: Text('Ver Matérias'),
+          ),
         ],
       ),
       body: Column(
@@ -269,13 +280,13 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 },
               ),
               ListTile(
-              leading: Icon(Icons.edit), // Adicione um ícone de edição
-              title: Text('Editar Tarefa'), // Altere o texto do botão
-              onTap: () {
-                Navigator.of(context).pop();
-                _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
-              },
-            ),
+                leading: Icon(Icons.edit), // Adicione um ícone de edição
+                title: Text('Editar Tarefa'), // Altere o texto do botão
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
+                },
+              ),
               ListTile(
                 leading: Icon(Icons.delete),
                 title: Text('Excluir Tarefa'),
