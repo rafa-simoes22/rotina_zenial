@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'adicionar_tarefa.dart';
-import 'editar.dart';
 
 class Tarefa {
   String titulo;
@@ -76,14 +75,12 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     _prefs = await SharedPreferences.getInstance();
     final tarefasJson = _prefs.getStringList('tarefas') ?? [];
     setState(() {
-      tarefas =
-          tarefasJson.map((json) => Tarefa.fromJson(jsonDecode(json))).toList();
+      tarefas = tarefasJson.map((json) => Tarefa.fromJson(jsonDecode(json))).toList();
     });
   }
 
   Future<void> _salvarTarefas() async {
-    final tarefasJson =
-        tarefas.map((tarefa) => jsonEncode(tarefa.toJson())).toList();
+    final tarefasJson = tarefas.map((tarefa) => jsonEncode(tarefa.toJson())).toList();
     await _prefs.setStringList('tarefas', tarefasJson);
   }
 
@@ -233,14 +230,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.edit), // Adicione um ícone de edição
-                title: Text('Editar Tarefa'), // Altere o texto do botão
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
-                },
-              ),
-              ListTile(
                 leading: Icon(Icons.delete),
                 title: Text('Excluir Tarefa'),
                 onTap: () {
@@ -255,14 +244,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           ),
         );
       },
-    );
-  }
-
-  void _mostrarTelaEditar(BuildContext context, Tarefa tarefa) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditarTarefa(tarefa: tarefa),
-      ),
     );
   }
 }
@@ -284,11 +265,11 @@ class DetalhesTarefa extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              tarefa.titulo,
+              'Título: ${tarefa.titulo}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text('Descrição: ${tarefa.descricao}'),
-            Text('Vencimento: ${tarefa.dataVencimento}'),
+            Text('Data de Vencimento: ${tarefa.dataVencimento}'),
             Text('Prioridade: ${tarefa.prioridade}'),
             Text('Concluída: ${tarefa.concluida ? 'Sim' : 'Não'}'),
           ],
