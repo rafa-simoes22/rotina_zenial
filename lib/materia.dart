@@ -25,7 +25,33 @@ class _MateriaPageState extends State<MateriaPage> {
             onPressed: () async {
               final novaMateria = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AdicionarMateriaPage(onMateriaAdicionada: (Materia ) {  },),
+                  builder: (context) => AdicionarMateriaPage(onMateriaAdicionada: (Materia novaMateria) {
+                    // Exibir os detalhes da matéria aqui
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Detalhes da Matéria'),
+                          content: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Nome da Matéria: ${novaMateria.nome}'),
+                              Text('Pontos Necessários: ${novaMateria.pontosNecessarios}'),
+                              Text('Prazo Estipulado: ${novaMateria.dataLimite}'),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
                 ),
               );
 
@@ -65,15 +91,3 @@ class MaterialList extends StatelessWidget {
     );
   }
 }
-
-class Materia {
-  final String nome;
-  final String pontosAdquiridos;
-  final String dataLimite;
-  final String prazoEstipulado;
-  final String nivelDificuldade;
-
-  Materia(this.nome, this.pontosAdquiridos, this.dataLimite, this.prazoEstipulado, this.nivelDificuldade);
-}
-
-
