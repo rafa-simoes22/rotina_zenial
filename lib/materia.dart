@@ -25,7 +25,7 @@ class _MateriaPageState extends State<MateriaPage> {
             onPressed: () async {
               final novaMateria = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AdicionarMateriaPage(),
+                  builder: (context) => AdicionarMateriaPage(onMateriaAdicionada: (Materia ) {  },),
                 ),
               );
 
