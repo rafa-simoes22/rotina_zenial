@@ -156,16 +156,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             icon: Icon(Icons.priority_high),
             onPressed: _ordernarTarefasPorPrioridade,
           ),
-          ElevatedButton( // Botão para ver as Matérias
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MateriaPage(),
-                ),
-              );
-            },
-            child: Text('Ver Matérias'),
-          ),
         ],
       ),
       body: Column(
@@ -218,6 +208,16 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 });
               },
             ),
+          ),
+          ElevatedButton( // Botão para ver as Matérias
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MateriaPage(),
+                ),
+              );
+            },
+            child: Text('Ver Matérias'),
           ),
         ],
       ),
