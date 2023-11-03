@@ -1,40 +1,45 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'materia.dart';
 
 class AdicionarMateriaPage extends StatefulWidget {
-  final Function(Materia) onMateriaAdicionada;
+  final List<Materia> materias;
+  final Function(Materia) adicionarMateria;
 
-  AdicionarMateriaPage({required this.onMateriaAdicionada});
+  AdicionarMateriaPage({
+    required this.materias,
+    required this.adicionarMateria,
+  });
 
   @override
   _AdicionarMateriaPageState createState() => _AdicionarMateriaPageState();
 }
 
 class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _pontosAdquiridosController = TextEditingController();
-  final TextEditingController _dataLimiteController = TextEditingController();
-  final TextEditingController _pontosNecessariosController = TextEditingController();
-  String _nivelDificuldade = 'Baixo';
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _nomeController = TextEditingController();
+  TextEditingController _pontosAdquiridosController = TextEditingController();
+  TextEditingController _dataLimiteController = TextEditingController();
+  String _nivelDificuldadeSelecionado = 'Fácil';
+  TextEditingController _pontosNecessariosController = TextEditingController();
 
   void _adicionarMateria() {
     if (_formKey.currentState!.validate()) {
-      final String nome = _nomeController.text;
-      final String pontosAdquiridos = _pontosAdquiridosController.text;
-      final String dataLimite = _dataLimiteController.text;
-      final String pontosNecessarios = _pontosNecessariosController.text;
-
-      final novaMateria = Materia(
-        nome,
-        pontosAdquiridos,
-        dataLimite,
-        _nivelDificuldade,
-        pontosNecessarios,
+      Materia novaMateria = Materia(
+        nome: _nomeController.text,
+        pontosAdquiridos: _pontosAdquiridosController.text,
+        dataLimite: _dataLimiteController.text,
+        nivelDificuldade: _nivelDificuldadeSelecionado,
+        pontosNecessarios: _pontosNecessariosController.text,
       );
-      widget.onMateriaAdicionada(novaMateria);
-      Navigator.pop(context, novaMateria);
+
+      setState(() {
+        widget.materias.add(novaMateria);
+        widget.adicionarMateria(novaMateria);
+      });
+
+      Navigator.pop(context);
     }
   }
 
@@ -44,12 +49,12 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
       appBar: AppBar(
         title: Text('Adicionar Matéria'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
                 controller: _nomeController,
@@ -63,64 +68,41 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
               ),
               TextFormField(
                 controller: _pontosAdquiridosController,
-                decoration: InputDecoration(labelText: 'Pontos já adquiridos'),
+                decoration: InputDecoration(labelText: 'Pontos Adquiridos'),
                 keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
+              ),
+              TextFormField(
+                controller: _dataLimiteController,
+                decoration: InputDecoration(labelText: 'Data Limite (DD/MM/AAAA)'),
+                keyboardType: TextInputType.datetime,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira os pontos adquiridos.';
-                  }
-                  return null;
+                  // Adicione validação de data aqui
+                  return null; // Retorne uma mensagem de erro se a data for inválida
                 },
+              ),
+              DropdownButtonFormField<String>(
+                value: _nivelDificuldadeSelecionado,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _nivelDificuldadeSelecionado = newValue!;
+                  });
+                },
+                items: <String>['Fácil', 'Médio', 'Difícil']
+                    .map<DropdownMenuItem<String>>(
+                      (String value) => DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList(),
+                decoration: InputDecoration(labelText: 'Nível de Dificuldade'),
               ),
               TextFormField(
                 controller: _pontosNecessariosController,
                 decoration: InputDecoration(labelText: 'Pontos Necessários'),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira os pontos necessários.';
-                  }
-                  return null;
-                },
               ),
-              InkWell(
-                onTap: () {
-                  _showDatePicker(context);
-                },
-                child: IgnorePointer(
-                  child: TextFormField(
-                    controller: _dataLimiteController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(labelText: 'Prazo Estipulado (DD/MM/AAAA)'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira a data limite.';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              DropdownButton<String>(
-                value: _nivelDificuldade,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _nivelDificuldade = newValue!;
-                  });
-                },
-                items: <String>['Baixo', 'Médio', 'Alto']
-                    .map<DropdownMenuItem<String>>(
-                      (String value) => DropdownMenuItem<String>(
-                        value: value,
-                        child: Text('Nível de dificuldade: $value'),
-                      ),
-                    )
-                    .toList(),
-              ),
-              SizedBox(height: 20),
+              SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _adicionarMateria,
                 child: Text('Adicionar Matéria'),
@@ -131,36 +113,4 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
       ),
     );
   }
-
-  void _showDatePicker(BuildContext context) async {
-  MaterialLocalizations localizations = MaterialLocalizations.of(context);
-
-  DateTime? dataSelecionada = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime.now(),
-    lastDate: DateTime.now().add(Duration(days: 365 * 50)),
-  );
-
-  if (dataSelecionada != null) {
-    String formattedDate = localizations.formatShortDate(dataSelecionada);
-    _dataLimiteController.text = formattedDate;
-  }
-}
-}
-
-class Materia {
-  final String nome;
-  final String pontosAdquiridos;
-  final String dataLimite;
-  final String nivelDificuldade;
-  final String pontosNecessarios;
-
-  Materia(
-    this.nome,
-    this.pontosAdquiridos,
-    this.dataLimite,
-    this.nivelDificuldade,
-    this.pontosNecessarios,
-  );
 }
