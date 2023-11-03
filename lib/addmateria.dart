@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AdicionarMateriaPage extends StatefulWidget {
   final Function(Materia) onMateriaAdicionada;
@@ -19,9 +19,23 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
   final TextEditingController _pontosNecessariosController = TextEditingController();
   String _nivelDificuldade = 'Baixo';
 
-  @override
-  void initState() {
-    super.initState();
+  void _adicionarMateria() {
+    if (_formKey.currentState!.validate()) {
+      final String nome = _nomeController.text;
+      final String pontosAdquiridos = _pontosAdquiridosController.text;
+      final String dataLimite = _dataLimiteController.text;
+      final String pontosNecessarios = _pontosNecessariosController.text;
+
+      final novaMateria = Materia(
+        nome,
+        pontosAdquiridos,
+        dataLimite,
+        _nivelDificuldade,
+        pontosNecessarios,
+      );
+      widget.onMateriaAdicionada(novaMateria);
+      Navigator.pop(context, novaMateria);
+    }
   }
 
   @override
@@ -108,24 +122,7 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final String nome = _nomeController.text;
-                    final String pontosAdquiridos = _pontosAdquiridosController.text;
-                    final String dataLimite = _dataLimiteController.text;
-                    final String pontosNecessarios = _pontosNecessariosController.text;
-
-                    final novaMateria = Materia(
-                      nome,
-                      pontosAdquiridos,
-                      dataLimite,
-                      _nivelDificuldade,
-                      pontosNecessarios,
-                    );
-                    widget.onMateriaAdicionada(novaMateria);
-                    Navigator.pop(context, novaMateria);
-                  }
-                },
+                onPressed: _adicionarMateria,
                 child: Text('Adicionar Matéria'),
               ),
             ],
@@ -135,18 +132,21 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
     );
   }
 
-  void _showDatePicker(BuildContext context) {
-    DatePicker.showDatePicker(
-      context,
-      showTitleActions: true,
-      minTime: DateTime.now(),
-      maxTime: DateTime.now().add(Duration(days: 365 * 50)), // Limite de 50 anos
-      onConfirm: (date) {
-        String formattedDate = "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()}";
-        _dataLimiteController.text = formattedDate;
-      },
-    );
+  void _showDatePicker(BuildContext context) async {
+  MaterialLocalizations localizations = MaterialLocalizations.of(context);
+
+  DateTime? dataSelecionada = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime.now(),
+    lastDate: DateTime.now().add(Duration(days: 365 * 50)),
+  );
+
+  if (dataSelecionada != null) {
+    String formattedDate = localizations.formatShortDate(dataSelecionada);
+    _dataLimiteController.text = formattedDate;
   }
+}
 }
 
 class Materia {
