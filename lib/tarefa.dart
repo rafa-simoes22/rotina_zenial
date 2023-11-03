@@ -213,7 +213,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => MateriaPage(),
+                  builder: (context) => MateriaPage(materias: [],),
                 ),
               );
             },
