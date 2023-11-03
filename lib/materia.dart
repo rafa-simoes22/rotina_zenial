@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'addmateria.dart';
 
 class MateriaPage extends StatefulWidget {
+  final List<Materia> materias;
+
+  MateriaPage({required this.materias});
+
   @override
   _MateriaPageState createState() => _MateriaPageState();
 }
 
 class _MateriaPageState extends State<MateriaPage> {
-  List<Materia> materias = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +20,7 @@ class _MateriaPageState extends State<MateriaPage> {
       body: Column(
         children: [
           Expanded(
-            child: MaterialList(materias: materias),
+            child: MaterialList(materias: widget.materias),
           ),
           SizedBox(height: 20),
           ElevatedButton(
@@ -38,12 +40,13 @@ class _MateriaPageState extends State<MateriaPage> {
                               Text('Nome da Matéria: ${novaMateria.nome}'),
                               Text('Pontos Necessários: ${novaMateria.pontosNecessarios}'),
                               Text('Prazo Estipulado: ${novaMateria.dataLimite}'),
+                              Text('Nível de Dificuldade: ${novaMateria.nivelDificuldade}'),
                             ],
                           ),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(novaMateria);
                               },
                               child: Text('OK'),
                             ),
@@ -57,7 +60,7 @@ class _MateriaPageState extends State<MateriaPage> {
 
               if (novaMateria != null) {
                 setState(() {
-                  materias.add(novaMateria);
+                  widget.materias.add(novaMateria);
                 });
               }
             },

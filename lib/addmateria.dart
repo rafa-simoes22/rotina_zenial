@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class AdicionarMateriaPage extends StatefulWidget {
   final Function(Materia) onMateriaAdicionada;
@@ -21,35 +22,6 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
   @override
   void initState() {
     super.initState();
-    _dataLimiteController.addListener(_formatDate);
-  }
-
-  @override
-  void dispose() {
-    _dataLimiteController.removeListener(_formatDate);
-    super.dispose();
-  }
-
-  void _formatDate() {
-    final trimmedValue = _dataLimiteController.text.replaceAll("/", "");
-
-    if (trimmedValue.length >= 2) {
-      _dataLimiteController.text = trimmedValue.substring(0, 2) + "/";
-      if (trimmedValue.length >= 4) {
-        _dataLimiteController.text += trimmedValue.substring(2, 4) + "/";
-        if (trimmedValue.length >= 8) {
-          _dataLimiteController.text += trimmedValue.substring(4, 8);
-        } else {
-          _dataLimiteController.text += trimmedValue.substring(4);
-        }
-      } else {
-        _dataLimiteController.text += trimmedValue.substring(2);
-      }
-    } else {
-      _dataLimiteController.text = trimmedValue;
-    }
-    _dataLimiteController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _dataLimiteController.text.length));
   }
 
   @override
@@ -100,10 +72,23 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _dataLimiteController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Prazo Estipulado (DD/MM/AAAA)'),
+              InkWell(
+                onTap: () {
+                  _showDatePicker(context);
+                },
+                child: IgnorePointer(
+                  child: TextFormField(
+                    controller: _dataLimiteController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(labelText: 'Prazo Estipulado (DD/MM/AAAA)'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira a data limite.';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ),
               DropdownButton<String>(
                 value: _nivelDificuldade,
@@ -147,6 +132,19 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showDatePicker(BuildContext context) {
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime.now(),
+      maxTime: DateTime.now().add(Duration(days: 365 * 50)), // Limite de 50 anos
+      onConfirm: (date) {
+        String formattedDate = "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()}";
+        _dataLimiteController.text = formattedDate;
+      },
     );
   }
 }
