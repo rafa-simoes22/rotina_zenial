@@ -49,7 +49,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TelaPrincipal(username: ""), // Inicializa com nome de usuário vazio
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFF97E366), // Cor da AppBar
+        ),
+        scaffoldBackgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
+      ),
     );
   }
 }
@@ -142,11 +147,12 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     );
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rotina Zenial'),
+        backgroundColor: Color(0xFF97E366),
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_today),
@@ -170,30 +176,33 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
               itemCount: tarefas.length,
               itemBuilder: (context, index) {
                 final tarefa = tarefas[index];
-                return Card(
-                  key: Key(tarefa.titulo),
-                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  child: ListTile(
-                    title: Text(tarefa.titulo),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(tarefa.prioridade),
-                        Text(tarefa.dataVencimento),
-                      ],
-                    ),
-                    trailing: Checkbox(
-                      value: tarefa.concluida,
-                      onChanged: (value) {
-                        setState(() {
-                          tarefa.concluida = value ?? false;
-                          _salvarTarefas();
-                        });
+                return Container(
+                  width: 200.0, // Defina a largura desejada aqui
+                  child: Card(
+                    key: Key(tarefa.titulo),
+                    margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    child: ListTile(
+                      title: Text(tarefa.titulo),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(tarefa.prioridade),
+                          Text(tarefa.dataVencimento),
+                        ],
+                      ),
+                      trailing: Checkbox(
+                        value: tarefa.concluida,
+                        onChanged: (value) {
+                          setState(() {
+                            tarefa.concluida = value ?? false;
+                            _salvarTarefas();
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        _mostrarOpcoes(context, tarefa);
                       },
                     ),
-                    onTap: () {
-                      _mostrarOpcoes(context, tarefa);
-                    },
                   ),
                 );
               },
@@ -209,11 +218,11 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
               },
             ),
           ),
-          ElevatedButton( // Botão para ver as Matérias
+          ElevatedButton(
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => MateriaPage(materias: [],),
+                  builder: (context) => MateriaPage(materias: []),
                 ),
               );
             },
@@ -239,6 +248,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         },
         child: Icon(Icons.add),
       ),
+      backgroundColor: Color(0xFFD8FFBE),
     );
   }
 

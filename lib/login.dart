@@ -58,38 +58,89 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login de Usuário'),
+        title: Text('Faça seu Login:',
+         style: TextStyle(color: Colors.black)), // Cor do texto preto
+        backgroundColor: Color(0xFF97E366), // Cor da AppBar
       ),
+      backgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Nome de Usuário',
-                ),
+             Container(
+              // Container para os inputs com background verde (#6aa076)
+              margin: EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
+              width: 300, // Defina a largura desejada
+              height: 350, // Defina a altura desejada
+              decoration: BoxDecoration(
+                color: Color(0xFFFE6F4DE),
+                border: Border(
+        top: BorderSide(color: Color(0xFF243618)),
+        left: BorderSide(color: Color(0xFF243618)),
+        right: BorderSide(color: Color(0xFF243618)),
+        bottom: BorderSide(color: Color(0xFF243618)),
+      ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 10), // Espaçamento entre os inputs
+
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Nome de Usuário:',
+                     focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
+                    ),
+                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
+                    ),
+                    style: TextStyle(color: Colors.black), // Cor do texto preto
+                    ),
+                  SizedBox(height: 30), // Espaçamento entre os inputs
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Senha:',
+                    focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
+                    ),
+                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
+                    ),
+                    style: TextStyle(color: Colors.black), // Cor do texto preto
+                    ),
+                   SizedBox(height: 80), // Espaçamento entre os inputs e o botão
+                  ElevatedButton(
+                onPressed: () => _login(context),
+                style: ElevatedButton.styleFrom(
+                primary: Color(0xFF97E366), // Cor de fundo
+                minimumSize: Size(200, 50), // Largura e altura
+                side: BorderSide(width: 0.5, color: Colors.black), // Borda preta
+              ),
+              child: Text(
+                'Fazer Login',
+                style: TextStyle(color: Colors.black), // Cor do texto preto
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                ),
+                ], 
               ),
             ),
-            ElevatedButton(
-              onPressed: () => _login(context),
-              child: Text('Fazer Login'),
-            ),
+           
+            
           ],
         ),
       ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+

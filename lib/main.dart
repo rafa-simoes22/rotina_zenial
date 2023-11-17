@@ -21,7 +21,7 @@ class InicioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF446A56),
+      backgroundColor: Color(0xFFD8FFBE),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +29,7 @@ class InicioPage extends StatelessWidget {
             // Adiciona a logo aqui
             Container(
               decoration: BoxDecoration(
-                border: Border.all(width: 2, color: Colors.black), // Borda preta
+                border: Border.all(width: 3, color: Colors.black), // Borda preta
               ),
               child: Image.asset(
                 'assets/logo.png', // Substitua pelo caminho real da sua logo
