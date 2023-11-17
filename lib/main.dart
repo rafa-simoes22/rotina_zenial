@@ -27,23 +27,45 @@ class InicioPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Adiciona a logo aqui
-            Image.asset(
-              'assets/logo.png', // Substitua pelo caminho real da sua logo
-              width: 250,
-              height: 250,
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2, color: Colors.black), // Borda preta
+              ),
+              child: Image.asset(
+                'assets/logo.png', // Substitua pelo caminho real da sua logo
+                width: 250,
+                height: 250,
+              ),
             ),
-            SizedBox(height: 20), // Espaçamento entre a logo e os botões
+            SizedBox(height:100), // Espaçamento entre a logo e os botões
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/cadastro');
               },
-              child: Text('Cadastro'),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF97E366), // Cor de fundo
+                minimumSize: Size(200, 50), // Largura e altura
+                side: BorderSide(width: 1, color: Colors.black), // Borda preta
+              ),
+              child: Text(
+                'Cadastro',
+                style: TextStyle(color: Colors.black), // Cor do texto preto
+              ),
             ),
+            SizedBox(height: 30), // Espaçamento entre os botões
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
               },
-              child: Text('Login'),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF97E366), // Cor de fundo
+                minimumSize: Size(200, 50), // Largura e altura
+                side: BorderSide(width: 1, color: Colors.black), // Borda preta
+              ),
+              child: Text(
+                'Login',
+                style: TextStyle(color: Colors.black), // Cor do texto preto
+              ),
             ),
           ],
         ),
