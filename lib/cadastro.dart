@@ -11,6 +11,195 @@ class CadastroPage extends StatefulWidget {
 class _CadastroPageState extends State<CadastroPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  String usernameError = '';
+  String passwordError = '';
+  String confirmPasswordError = '';
+
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Faça seu cadastro',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color(0xFF97E366),
+      ),
+      backgroundColor: Color(0xFFD8FFBE),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
+                width: 300,
+                height: 380,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFE6F4DE),
+                  border: Border(
+                    top: BorderSide(color: Color(0xFF243618)),
+                    left: BorderSide(color: Color(0xFF243618)),
+                    right: BorderSide(color: Color(0xFF243618)),
+                    bottom: BorderSide(color: Color(0xFF243618)),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: nameController,
+                      onChanged: (_) {
+                        setState(() {
+                          usernameError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Nome de Usuário:',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: TextStyle(color: Colors.black),
+                        errorText: usernameError.isEmpty ? null : usernameError,
+                      ),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: passwordController,
+                      onChanged: (_) {
+                        setState(() {
+                          passwordError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      obscureText: obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Senha:',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: TextStyle(color: Colors.black),
+                        errorText: passwordError.isEmpty ? null : passwordError,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          },
+                          icon: Icon(
+                            obscurePassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
+                            color: Colors.green, // Alterando a cor do ícone para verde
+                          ),
+                        ),
+                      ),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: confirmPasswordController,
+                      onChanged: (_) {
+                        setState(() {
+                          confirmPasswordError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      obscureText: obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: 'Confirmar Senha:',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: TextStyle(color: Colors.black),
+                        errorText: confirmPasswordError.isEmpty ? null : confirmPasswordError,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscureConfirmPassword = !obscureConfirmPassword;
+                            });
+                          },
+                          icon: Icon(
+                            obscureConfirmPassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
+                            color: Colors.green, // Alterando a cor do ícone para verde
+                          ),
+                        ),
+                      ),
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(height: 50), // Adicionado margin-top para centralizar o botão
+                    ElevatedButton(
+                      onPressed: () {
+                        // Validação dos campos
+                        final String username = nameController.text;
+                        final String password = passwordController.text;
+                        final String confirmPassword = confirmPasswordController.text;
+
+                        if (username.isEmpty) {
+                          setState(() {
+                            usernameError = 'Por favor, digite um nome de usuário.';
+                          });
+                        }
+
+                        if (password.isEmpty) {
+                          setState(() {
+                            passwordError = 'Por favor, digite uma senha.';
+                          });
+                        } else {
+                          // Validação da senha
+                          if (password.length != 8) {
+                            setState(() {
+                              passwordError = 'A senha deve ter exatamente 8 caracteres.';
+                            });
+                          } else if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
+                            setState(() {
+                              passwordError = 'Adicione pelo menos 1 letra.';
+                            });
+                          } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+                            setState(() {
+                              passwordError = 'Adicione pelo menos 1 caracter especial.';
+                            });
+                          }
+                        }
+
+                        if (confirmPassword != password) {
+                          setState(() {
+                            confirmPasswordError = 'As senhas não coincidem.';
+                          });
+                        }
+
+                        if (username.isNotEmpty &&
+                            password.isNotEmpty &&
+                            password.length == 8 &&
+                            RegExp(r'[a-zA-Z]').hasMatch(password) &&
+                            RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password) &&
+                            confirmPassword == password) {
+                          // Se os campos são válidos, continue com o registro
+                          _register(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF97E366),
+                        minimumSize: Size(200, 50),
+                        side: BorderSide(width: 0.5, color: Colors.black),
+                      ),
+                      child: Text(
+                        'Cadastrar',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<void> _register(BuildContext context) async {
     final String username = nameController.text;
@@ -60,87 +249,6 @@ class _CadastroPageState extends State<CadastroPage> {
     // Limpar os campos após o registro
     nameController.clear();
     passwordController.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-         title: Text(
-          'Faça seu cadastro',
-          style: TextStyle(color: Colors.black), // Cor do texto preto
-        ),
-        backgroundColor: Color(0xFF97E366), // Cor da AppBar
-      ),
-      backgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              // Container para os inputs com background verde (#6aa076)
-              margin: EdgeInsets.all(16),
-              padding: EdgeInsets.all(16),
-              width: 300, // Defina a largura desejada
-              height: 350, // Defina a altura desejada
-              decoration: BoxDecoration(
-                color: Color(0xFFFE6F4DE),
-                border: Border(
-        top: BorderSide(color: Color(0xFF243618)),
-        left: BorderSide(color: Color(0xFF243618)),
-        right: BorderSide(color: Color(0xFF243618)),
-        bottom: BorderSide(color: Color(0xFF243618)),
-      ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: 10), // Espaçamento entre os inputs
-
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Nome de Usuário:',
-                     focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
-                    ),
-                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
-                    ),
-                    style: TextStyle(color: Colors.black), // Cor do texto preto
-                    ),
-                  SizedBox(height: 30), // Espaçamento entre os inputs
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Senha:',
-                    focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
-                    ),
-                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
-                    ),
-                    style: TextStyle(color: Colors.black), // Cor do texto preto
-                    ),
-                   SizedBox(height: 80), // Espaçamento entre os inputs e o botão
-                  ElevatedButton(
-                onPressed: () => _register(context),
-                style: ElevatedButton.styleFrom(
-                primary: Color(0xFF97E366), // Cor de fundo
-                minimumSize: Size(200, 50), // Largura e altura
-                side: BorderSide(width: 0.5, color: Colors.black), // Borda preta
-              ),
-              child: Text(
-                'Cadastrar',
-                style: TextStyle(color: Colors.black), // Cor do texto preto
-              ),
-            ),
-                ], 
-              ),
-            ),
-           
-            
-          ],
-        ),
-      ),
-    );
+    confirmPasswordController.clear();
   }
 }

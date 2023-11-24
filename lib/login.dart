@@ -12,135 +12,160 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  String usernameError = '';
+  String passwordError = '';
+
   Future<void> _login(BuildContext context) async {
     final String username = nameController.text;
     final String password = passwordController.text;
 
-    final database = await openDatabase(
-      join(await getDatabasesPath(), 'user_database.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
-        );
-      },
-      version: 1,
-    );
-
-    final List<Map<String, dynamic>> users = await database.query(
-      'users',
-      where: 'name = ? AND password = ?',
-      whereArgs: [username, password],
-    );
-
-    if (users.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login bem-sucedido')),
-      );
-
-      // Navegar para a tela de tarefas após o login bem-sucedido
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => TelaPrincipal(username: username), // Passe o nome de usuário
-        ),
-      );
+    if (username.isEmpty) {
+      setState(() {
+        usernameError = 'Por favor, digite um nome de usuário.';
+      });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
-      );
+      setState(() {
+        usernameError = '';
+      });
     }
 
-    // Limpar os campos após a tentativa de login
-    nameController.clear();
-    passwordController.clear();
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = 'Por favor, digite uma senha.';
+      });
+    } else {
+      setState(() {
+        passwordError = '';
+      });
+    }
+
+    if (username.isNotEmpty && password.isNotEmpty) {
+      final database = await openDatabase(
+        join(await getDatabasesPath(), 'user_database.db'),
+        onCreate: (db, version) {
+          return db.execute(
+            'CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)',
+          );
+        },
+        version: 1,
+      );
+
+      final List<Map<String, dynamic>> users = await database.query(
+        'users',
+        where: 'name = ? AND password = ?',
+        whereArgs: [username, password],
+      );
+
+      if (users.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login bem-sucedido')),
+        );
+
+        // Navegar para a tela de tarefas após o login bem-sucedido
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => TelaPrincipal(username: username), // Passe o nome de usuário
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
+        );
+      }
+
+      // Limpar os campos após a tentativa de login
+      nameController.clear();
+      passwordController.clear();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Faça seu Login:',
-         style: TextStyle(color: Colors.black)), // Cor do texto preto
-        backgroundColor: Color(0xFF97E366), // Cor da AppBar
+        title: Text(
+          'Faça seu Login:',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color(0xFF97E366),
       ),
-      backgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
+      backgroundColor: Color(0xFFD8FFBE),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             Container(
-              // Container para os inputs com background verde (#6aa076)
+            Container(
               margin: EdgeInsets.all(16),
               padding: EdgeInsets.all(16),
-              width: 300, // Defina a largura desejada
-              height: 350, // Defina a altura desejada
+              width: 300,
+              height: 350,
               decoration: BoxDecoration(
                 color: Color(0xFFFE6F4DE),
                 border: Border(
-        top: BorderSide(color: Color(0xFF243618)),
-        left: BorderSide(color: Color(0xFF243618)),
-        right: BorderSide(color: Color(0xFF243618)),
-        bottom: BorderSide(color: Color(0xFF243618)),
-      ),
+                  top: BorderSide(color: Color(0xFF243618)),
+                  left: BorderSide(color: Color(0xFF243618)),
+                  right: BorderSide(color: Color(0xFF243618)),
+                  bottom: BorderSide(color: Color(0xFF243618)),
+                ),
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 10), // Espaçamento entre os inputs
-
+                  SizedBox(height: 10),
                   TextField(
                     controller: nameController,
+                    onChanged: (_) {
+                      setState(() {
+                        usernameError = ''; // Limpa a mensagem de erro ao começar a digitar
+                      });
+                    },
                     decoration: InputDecoration(
                       labelText: 'Nome de Usuário:',
-                     focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      labelStyle: TextStyle(color: Colors.black),
+                      errorText: usernameError.isEmpty ? null : usernameError,
                     ),
-                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
-                    ),
-                    style: TextStyle(color: Colors.black), // Cor do texto preto
-                    ),
-                  SizedBox(height: 30), // Espaçamento entre os inputs
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(height: 30),
                   TextField(
                     controller: passwordController,
+                    onChanged: (_) {
+                      setState(() {
+                        passwordError = ''; // Limpa a mensagem de erro ao começar a digitar
+                      });
+                    },
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Senha:',
-                    focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green), // Cor da linha quando focado
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                      labelStyle: TextStyle(color: Colors.black),
+                      errorText: passwordError.isEmpty ? null : passwordError,
                     ),
-                    labelStyle: TextStyle(color: Colors.black), // Cor do texto do placeholder
-                    ),
-                    style: TextStyle(color: Colors.black), // Cor do texto preto
-                    ),
-                   SizedBox(height: 80), // Espaçamento entre os inputs e o botão
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(height: 55),
                   ElevatedButton(
-                onPressed: () => _login(context),
-                style: ElevatedButton.styleFrom(
-                primary: Color(0xFF97E366), // Cor de fundo
-                minimumSize: Size(200, 50), // Largura e altura
-                side: BorderSide(width: 0.5, color: Colors.black), // Borda preta
-              ),
-              child: Text(
-                'Fazer Login',
-                style: TextStyle(color: Colors.black), // Cor do texto preto
+                    onPressed: () => _login(context),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF97E366),
+                      minimumSize: Size(200, 50),
+                      side: BorderSide(width: 0.5, color: Colors.black),
+                    ),
+                    child: Text(
+                      'Fazer Login',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ],
               ),
             ),
-                ], 
-              ),
-            ),
-           
-            
           ],
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
