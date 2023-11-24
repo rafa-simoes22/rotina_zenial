@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'tarefa.dart'; // Importe a tela principal
+import 'tarefa.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +14,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String usernameError = '';
   String passwordError = '';
+
+  bool obscurePassword = true;
 
   Future<void> _login(BuildContext context) async {
     final String username = nameController.text;
@@ -64,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
         // Navegar para a tela de tarefas após o login bem-sucedido
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => TelaPrincipal(username: username), // Passe o nome de usuário
+            builder: (context) => TelaPrincipal(username: username),
           ),
         );
       } else {
@@ -136,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                         passwordError = ''; // Limpa a mensagem de erro ao começar a digitar
                       });
                     },
-                    obscureText: true,
+                    obscureText: obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Senha:',
                       focusedBorder: UnderlineInputBorder(
@@ -144,6 +146,17 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       labelStyle: TextStyle(color: Colors.black),
                       errorText: passwordError.isEmpty ? null : passwordError,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscurePassword = !obscurePassword;
+                          });
+                        },
+                        icon: Icon(
+                          obscurePassword ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.green,
+                        ),
+                      ),
                     ),
                     style: TextStyle(color: Colors.black),
                   ),
