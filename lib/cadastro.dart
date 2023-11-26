@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'login.dart';
 
 class CadastroPage extends StatefulWidget {
+  const CadastroPage({super.key});
+
   @override
   _CadastroPageState createState() => _CadastroPageState();
 }
@@ -24,25 +26,25 @@ class _CadastroPageState extends State<CadastroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Faça seu cadastro',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color(0xFF97E366),
+        backgroundColor: const Color(0xFF97E366),
       ),
-      backgroundColor: Color(0xFFD8FFBE),
+      backgroundColor: const Color(0xFFD8FFBE),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(16),
-                padding: EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 width: 300,
                 height: 380,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFE6F4DE),
+                decoration: const BoxDecoration(
+                  color: Color(0xfffe6f4de),
                   border: Border(
                     top: BorderSide(color: Color(0xFF243618)),
                     left: BorderSide(color: Color(0xFF243618)),
@@ -52,7 +54,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: nameController,
                       onChanged: (_) {
@@ -62,15 +64,15 @@ class _CadastroPageState extends State<CadastroPage> {
                       },
                       decoration: InputDecoration(
                         labelText: 'Nome de Usuário:',
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: const TextStyle(color: Colors.black),
                         errorText: usernameError.isEmpty ? null : usernameError,
                       ),
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: passwordController,
                       onChanged: (_) {
@@ -81,10 +83,10 @@ class _CadastroPageState extends State<CadastroPage> {
                       obscureText: obscurePassword,
                       decoration: InputDecoration(
                         labelText: 'Senha:',
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: const TextStyle(color: Colors.black),
                         errorText: passwordError.isEmpty ? null : passwordError,
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -98,9 +100,9 @@ class _CadastroPageState extends State<CadastroPage> {
                           ),
                         ),
                       ),
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: confirmPasswordController,
                       onChanged: (_) {
@@ -111,10 +113,10 @@ class _CadastroPageState extends State<CadastroPage> {
                       obscureText: obscureConfirmPassword,
                       decoration: InputDecoration(
                         labelText: 'Confirmar Senha:',
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.green),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: const TextStyle(color: Colors.black),
                         errorText: confirmPasswordError.isEmpty ? null : confirmPasswordError,
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -128,9 +130,9 @@ class _CadastroPageState extends State<CadastroPage> {
                           ),
                         ),
                       ),
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 50), // Adicionado margin-top para centralizar o botão
+                    const SizedBox(height: 50), // Adicionado margin-top para centralizar o botão
                     ElevatedButton(
                       onPressed: () {
                         // Validação dos campos
@@ -182,11 +184,11 @@ class _CadastroPageState extends State<CadastroPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF97E366),
-                        minimumSize: Size(200, 50),
-                        side: BorderSide(width: 0.5, color: Colors.black),
+                        backgroundColor: const Color(0xFF97E366),
+                        minimumSize: const Size(200, 50),
+                        side: const BorderSide(width: 0.5, color: Colors.black),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Cadastrar',
                         style: TextStyle(color: Colors.black),
                       ),
@@ -231,18 +233,18 @@ class _CadastroPageState extends State<CadastroPage> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Cadastro realizado com sucesso')),
+        const SnackBar(content: Text('Cadastro realizado com sucesso')),
       );
 
       // Navegar de volta para a tela de login após o registro bem-sucedido
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => LoginPage(),
+          builder: (context) => const LoginPage(),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
+        const SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
       );
     }
 
