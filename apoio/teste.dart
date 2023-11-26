@@ -3,20 +3,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() => runApp(TaskListApp());
+void main() => runApp(const TaskListApp());
 
 class TaskListApp extends StatelessWidget {
+  const TaskListApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lista de Tarefas',
       theme: ThemeData(primarySwatch: Colors.teal),
-      home: TaskListScreen(),
+      home: const TaskListScreen(),
     );
   }
 }
 
 class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key});
+
   @override
   _TaskListScreenState createState() => _TaskListScreenState();
 }
@@ -24,7 +28,7 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   List<Map<String, dynamic>> tasks = [];
 
-  TextEditingController _newTaskController = TextEditingController();
+  final TextEditingController _newTaskController = TextEditingController();
   String emojiDescription = ''; // Variável para armazenar a descrição do emoji selecionado
 
   @override
@@ -108,14 +112,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Tarefas'),
+        title: const Text('Lista de Tarefas'),
         actions: [
           IconButton(
-            icon: Icon(Icons.arrow_forward),
+            icon: const Icon(Icons.arrow_forward),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ZenialRoutinePage()),
+                MaterialPageRoute(builder: (context) => const ZenialRoutinePage()),
               );
             },
           ),
@@ -124,11 +128,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             color: Theme.of(context).primaryColor, // Define a mesma cor da AppBar
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Como você está se sentindo?',
                   style: TextStyle(
                     fontSize: 24.0,
@@ -136,7 +140,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   ),
                   textAlign: TextAlign.center, // Centraliza o texto
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -144,7 +148,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       onTap: () {
                         _showEmojiDescription('😃'); // Mostrar descrição feliz
                       },
-                      child: Text(
+                      child: const Text(
                         '😃',
                         style: TextStyle(fontSize: 20.0),
                       ),
@@ -153,7 +157,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       onTap: () {
                         _showEmojiDescription('😢'); // Mostrar descrição triste
                       },
-                      child: Text(
+                      child: const Text(
                         '😢',
                         style: TextStyle(fontSize: 20.0),
                       ),
@@ -162,7 +166,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       onTap: () {
                         _showEmojiDescription('😐'); // Mostrar descrição normal
                       },
-                      child: Text(
+                      child: const Text(
                         '😐',
                         style: TextStyle(fontSize: 20.0),
                       ),
@@ -174,7 +178,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
           ),
           Text(
             emojiDescription,
-            style: TextStyle(fontSize: 15.0),
+            style: const TextStyle(fontSize: 15.0),
             textAlign: TextAlign.center, // Centraliza o texto
           ),
           Expanded(
@@ -205,7 +209,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                         ),
                       ),
                       trailing: isCompleted
-                          ? Icon(Icons.check, color: Colors.green)
+                          ? const Icon(Icons.check, color: Colors.green)
                           : null,
                     ),
                   ),
@@ -221,10 +225,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Adicionar Tarefa'),
+                title: const Text('Adicionar Tarefa'),
                 content: TextField(
                   controller: _newTaskController,
-                  decoration: InputDecoration(labelText: 'Digite a nova tarefa'),
+                  decoration: const InputDecoration(labelText: 'Digite a nova tarefa'),
                 ),
                 actions: [
                   ElevatedButton(
@@ -233,44 +237,46 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       _newTaskController.clear();
                       Navigator.of(context).pop();
                     },
-                    child: Text('Adicionar'),
+                    child: const Text('Adicionar'),
                   ),
                 ],
               );
             },
           );
         },
-        label: Text('Adicionar Tarefa'),
-        icon: Icon(Icons.add),
+        label: const Text('Adicionar Tarefa'),
+        icon: const Icon(Icons.add),
       ),
     );
   }
 }
 
 class ZenialRoutinePage extends StatelessWidget {
+  const ZenialRoutinePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rotina Zenial'),
+        title: const Text('Rotina Zenial'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Rotina Zenial',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context); // Voltar para a tela anterior (Lista de Tarefas)
               },
-              child: Text('Início'),
+              child: const Text('Início'),
             ),
           ],
         ),

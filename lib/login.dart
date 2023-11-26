@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'tarefa.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -60,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (users.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login bem-sucedido')),
+          const SnackBar(content: Text('Login bem-sucedido')),
         );
 
         // Navegar para a tela de tarefas após o login bem-sucedido
@@ -71,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
+          const SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
         );
       }
 
@@ -85,24 +87,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Faça seu Login:',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color(0xFF97E366),
+        backgroundColor: const Color(0xFF97E366),
       ),
-      backgroundColor: Color(0xFFD8FFBE),
+      backgroundColor: const Color(0xFFD8FFBE),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.all(16),
-              padding: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               width: 300,
               height: 350,
-              decoration: BoxDecoration(
-                color: Color(0xFFFE6F4DE),
+              decoration: const BoxDecoration(
+                color: Color(0xfffe6f4de),
                 border: Border(
                   top: BorderSide(color: Color(0xFF243618)),
                   left: BorderSide(color: Color(0xFF243618)),
@@ -112,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: nameController,
                     onChanged: (_) {
@@ -122,15 +124,15 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Nome de Usuário:',
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.green),
                       ),
-                      labelStyle: TextStyle(color: Colors.black),
+                      labelStyle: const TextStyle(color: Colors.black),
                       errorText: usernameError.isEmpty ? null : usernameError,
                     ),
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   TextField(
                     controller: passwordController,
                     onChanged: (_) {
@@ -141,10 +143,10 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Senha:',
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.green),
                       ),
-                      labelStyle: TextStyle(color: Colors.black),
+                      labelStyle: const TextStyle(color: Colors.black),
                       errorText: passwordError.isEmpty ? null : passwordError,
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -158,17 +160,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    style: TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black),
                   ),
-                  SizedBox(height: 55),
+                  const SizedBox(height: 55),
                   ElevatedButton(
                     onPressed: () => _login(context),
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF97E366),
-                      minimumSize: Size(200, 50),
-                      side: BorderSide(width: 0.5, color: Colors.black),
+                      backgroundColor: const Color(0xFF97E366),
+                      minimumSize: const Size(200, 50),
+                      side: const BorderSide(width: 0.5, color: Colors.black),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Fazer Login',
                       style: TextStyle(color: Colors.black),
                     ),
