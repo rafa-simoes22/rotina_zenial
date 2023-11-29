@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'tarefa.dart';
 
@@ -6,7 +5,7 @@ class EditarTarefa extends StatefulWidget {
   final Tarefa tarefa;
   final Function(Tarefa) atualizarTarefa; // Adicionado novo parâmetro
 
-  EditarTarefa({required this.tarefa, required this.atualizarTarefa});
+  const EditarTarefa({super.key, required this.tarefa, required this.atualizarTarefa});
 
   @override
   _EditarTarefaState createState() => _EditarTarefaState();
@@ -31,7 +30,7 @@ class _EditarTarefaState extends State<EditarTarefa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Tarefa'),
+        title: const Text('Editar Tarefa'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -40,21 +39,21 @@ class _EditarTarefaState extends State<EditarTarefa> {
           children: [
             TextField(
               controller: tituloController,
-              decoration: InputDecoration(labelText: 'Título'),
+              decoration: const InputDecoration(labelText: 'Título'),
             ),
             TextField(
               controller: descricaoController,
-              decoration: InputDecoration(labelText: 'Descrição'),
+              decoration: const InputDecoration(labelText: 'Descrição'),
             ),
             TextField(
               controller: dataVencimentoController,
-              decoration: InputDecoration(labelText: 'Data de Vencimento'),
+              decoration: const InputDecoration(labelText: 'Data de Vencimento'),
             ),
             TextField(
               controller: prioridadeController,
-              decoration: InputDecoration(labelText: 'Prioridade'),
+              decoration: const InputDecoration(labelText: 'Prioridade'),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Atualizar os valores da tarefa com os dados inseridos
@@ -69,7 +68,7 @@ class _EditarTarefaState extends State<EditarTarefa> {
                 Navigator.of(context)
                     .pop(); // Voltar à tela de detalhes da tarefa
               },
-              child: Text('Salvar Alterações'),
+              child: const Text('Salvar Alterações'),
             ),
           ],
         ),
