@@ -5,7 +5,7 @@ class AdicionarMateriaPage extends StatefulWidget {
   final List<Materia> materias;
   final Function(Materia) adicionarMateria;
 
-  const AdicionarMateriaPage({super.key, 
+  AdicionarMateriaPage({
     required this.materias,
     required this.adicionarMateria,
   });
@@ -16,11 +16,11 @@ class AdicionarMateriaPage extends StatefulWidget {
 
 class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _pontosAdquiridosController = TextEditingController();
-  final TextEditingController _dataLimiteController = TextEditingController();
+  TextEditingController _nomeController = TextEditingController();
+  TextEditingController _pontosAdquiridosController = TextEditingController();
+  TextEditingController _dataLimiteController = TextEditingController();
   String _nivelDificuldadeSelecionado = 'Fácil';
-  final TextEditingController _pontosNecessariosController = TextEditingController();
+  TextEditingController _pontosNecessariosController = TextEditingController();
 
   void _adicionarMateria() {
     if (_formKey.currentState!.validate()) {
@@ -45,10 +45,10 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adicionar Matéria'),
+        title: Text('Adicionar Matéria'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -56,7 +56,7 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
             children: <Widget>[
               TextFormField(
                 controller: _nomeController,
-                decoration: const InputDecoration(labelText: 'Nome da Matéria'),
+                decoration: InputDecoration(labelText: 'Nome da Matéria'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor, insira o nome da matéria.';
@@ -66,12 +66,12 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
               ),
               TextFormField(
                 controller: _pontosAdquiridosController,
-                decoration: const InputDecoration(labelText: 'Pontos Adquiridos'),
+                decoration: InputDecoration(labelText: 'Pontos Adquiridos'),
                 keyboardType: TextInputType.number,
               ),
               TextFormField(
                 controller: _dataLimiteController,
-                decoration: const InputDecoration(labelText: 'Data Limite (DD/MM/AAAA)'),
+                decoration: InputDecoration(labelText: 'Data Limite (DD/MM/AAAA)'),
                 keyboardType: TextInputType.datetime,
                 validator: (value) {
                   // Adicione validação de data aqui
@@ -93,17 +93,17 @@ class _AdicionarMateriaPageState extends State<AdicionarMateriaPage> {
                       ),
                     )
                     .toList(),
-                decoration: const InputDecoration(labelText: 'Nível de Dificuldade'),
+                decoration: InputDecoration(labelText: 'Nível de Dificuldade'),
               ),
               TextFormField(
                 controller: _pontosNecessariosController,
-                decoration: const InputDecoration(labelText: 'Pontos Necessários'),
+                decoration: InputDecoration(labelText: 'Pontos Necessários'),
                 keyboardType: TextInputType.number,
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _adicionarMateria,
-                child: const Text('Adicionar Matéria'),
+                child: Text('Adicionar Matéria'),
               ),
             ],
           ),

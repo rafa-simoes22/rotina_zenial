@@ -42,20 +42,18 @@ class Tarefa {
 }
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           backgroundColor: Color(0xFF97E366), // Cor da AppBar
         ),
-        scaffoldBackgroundColor: const Color(0xFFD8FFBE), // Cor do scaffold
+        scaffoldBackgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
       ),
     );
   }
@@ -64,7 +62,7 @@ class MyApp extends StatelessWidget {
 class TelaPrincipal extends StatefulWidget {
   final String username; // Adiciona um parâmetro para o nome de usuário
 
-  const TelaPrincipal({super.key, required this.username}); // Construtor
+  TelaPrincipal({required this.username}); // Construtor
 
   @override
   _TelaPrincipalState createState() => _TelaPrincipalState();
@@ -153,15 +151,15 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rotina Zenial'),
-        backgroundColor: const Color(0xFF97E366),
+        title: Text('Rotina Zenial'),
+        backgroundColor: Color(0xFF97E366),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today),
+            icon: Icon(Icons.calendar_today),
             onPressed: _ordernarTarefasPorData,
           ),
           IconButton(
-            icon: const Icon(Icons.priority_high),
+            icon: Icon(Icons.priority_high),
             onPressed: _ordernarTarefasPorPrioridade,
           ),
         ],
@@ -174,15 +172,15 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           ),
           Expanded(
             child: ReorderableListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               itemCount: tarefas.length,
               itemBuilder: (context, index) {
                 final tarefa = tarefas[index];
-                return SizedBox(
+                return Container(
                   width: 200.0, // Defina a largura desejada aqui
                   child: Card(
                     key: Key(tarefa.titulo),
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                    margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                     child: ListTile(
                       title: Text(tarefa.titulo),
                       subtitle: Column(
@@ -224,11 +222,11 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const MateriaPage(materias: []),
+                  builder: (context) => MateriaPage(materias: []),
                 ),
               );
             },
-            child: const Text('Ver Matérias'),
+            child: Text('Ver Matérias'),
           ),
         ],
       ),
@@ -236,7 +234,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         onPressed: () async {
           final tarefaJson = await Navigator.of(context).push<String>(
             MaterialPageRoute(
-              builder: (context) => const TarefasApp(),
+              builder: (context) => TarefasApp(),
             ),
           );
 
@@ -248,9 +246,9 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             await _salvarTarefas();
           }
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
-      backgroundColor: const Color(0xFFD8FFBE),
+      backgroundColor: Color(0xFFD8FFBE),
     );
   }
 
@@ -280,8 +278,8 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: const Icon(Icons.description),
-                title: const Text('Detalhes da Tarefa'),
+                leading: Icon(Icons.description),
+                title: Text('Detalhes da Tarefa'),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(
@@ -292,16 +290,16 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.edit), // Adicione um ícone de edição
-                title: const Text('Editar Tarefa'), // Altere o texto do botão
+                leading: Icon(Icons.edit), // Adicione um ícone de edição
+                title: Text('Editar Tarefa'), // Altere o texto do botão
                 onTap: () {
                   Navigator.of(context).pop();
                   _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete),
-                title: const Text('Excluir Tarefa'),
+                leading: Icon(Icons.delete),
+                title: Text('Excluir Tarefa'),
                 onTap: () {
                   setState(() {
                     tarefas.remove(tarefa);
@@ -321,13 +319,13 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 class DetalhesTarefa extends StatelessWidget {
   final Tarefa tarefa;
 
-  const DetalhesTarefa({super.key, required this.tarefa});
+  DetalhesTarefa({required this.tarefa});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhes da Tarefa'),
+        title: Text('Detalhes da Tarefa'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -336,7 +334,7 @@ class DetalhesTarefa extends StatelessWidget {
           children: [
             Text(
               'Título: ${tarefa.titulo}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text('Descrição: ${tarefa.descricao}'),
             Text('Data de Vencimento: ${tarefa.dataVencimento}'),

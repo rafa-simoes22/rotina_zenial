@@ -35,22 +35,20 @@ class Tarefa {
 }
 
 void main() {
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
     home: TarefasApp(),
   ));
 }
 
 class TarefasApp extends StatefulWidget {
-  const TarefasApp({super.key});
-
   @override
   _TarefasAppState createState() => _TarefasAppState();
 }
 
 class _TarefasAppState extends State<TarefasApp> {
-  final TextEditingController _tituloController = TextEditingController();
-  final TextEditingController _descricaoController = TextEditingController();
-  final TextEditingController _dataVencimentoController = TextEditingController();
+  TextEditingController _tituloController = TextEditingController();
+  TextEditingController _descricaoController = TextEditingController();
+  TextEditingController _dataVencimentoController = TextEditingController();
   String _prioridadeSelecionada = 'Alto';
 
  void _adicionarTarefa() {
@@ -61,14 +59,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
-          content: const Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
+          title: Text('Erro de Data'),
+          content: Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -89,14 +87,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
-          content: const Text('O mês deve estar entre 1 e 12.'),
+          title: Text('Erro de Data'),
+          content: Text('O mês deve estar entre 1 e 12.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -110,14 +108,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
-          content: const Text('O dia deve estar entre 1 e 31.'),
+          title: Text('Erro de Data'),
+          content: Text('O dia deve estar entre 1 e 31.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -131,14 +129,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
+          title: Text('Erro de Data'),
           content: Text('O mês $mes não tem $dia dias.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -154,14 +152,14 @@ class _TarefasAppState extends State<TarefasApp> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Erro de Data'),
+              title: Text('Erro de Data'),
               content: Text('Fevereiro de $ano tem no máximo 29 dias.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('OK'),
+                  child: Text('OK'),
                 ),
               ],
             );
@@ -175,14 +173,14 @@ class _TarefasAppState extends State<TarefasApp> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Erro de Data'),
+              title: Text('Erro de Data'),
               content: Text('Fevereiro de $ano tem no máximo 28 dias.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('OK'),
+                  child: Text('OK'),
                 ),
               ],
             );
@@ -198,14 +196,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
-          content: const Text('O ano não pode ser anterior ao ano atual.'),
+          title: Text('Erro de Data'),
+          content: Text('O ano não pode ser anterior ao ano atual.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -221,14 +219,14 @@ class _TarefasAppState extends State<TarefasApp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Erro de Data'),
-          content: const Text('A data de vencimento não pode ser anterior à data atual.'),
+          title: Text('Erro de Data'),
+          content: Text('A data de vencimento não pode ser anterior à data atual.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text('OK'),
             ),
           ],
         );
@@ -256,20 +254,20 @@ class _TarefasAppState extends State<TarefasApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Tarefas App'),
+          title: Text('Tarefas App'),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
                 controller: _tituloController,
-                decoration: const InputDecoration(labelText: 'Título'),
+                decoration: InputDecoration(labelText: 'Título'),
               ),
               TextFormField(
                 controller: _descricaoController,
-                decoration: const InputDecoration(labelText: 'Descrição'),
+                decoration: InputDecoration(labelText: 'Descrição'),
               ),
               TextFormField(
                 controller: _dataVencimentoController,
@@ -278,7 +276,7 @@ class _TarefasAppState extends State<TarefasApp> {
                   DataInputFormatter(),
                 ],
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Data de Vencimento (DD/MM/AAAA)'),
+                decoration: InputDecoration(labelText: 'Data de Vencimento (DD/MM/AAAA)'),
               ),
               DropdownButtonFormField<String>(
                 value: _prioridadeSelecionada,
@@ -295,12 +293,12 @@ class _TarefasAppState extends State<TarefasApp> {
                       ),
                     )
                     .toList(),
-                decoration: const InputDecoration(labelText: 'Prioridade'),
+                decoration: InputDecoration(labelText: 'Prioridade'),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _adicionarTarefa,
-                child: const Text('Adicionar Tarefa'),
+                child: Text('Adicionar Tarefa'),
               ),
             ],
           ),
@@ -318,9 +316,9 @@ class DataInputFormatter extends TextInputFormatter {
     final String trimmedValue = newValue.text.replaceAll("/", "");
 
     if (trimmedValue.length >= 2) {
-      newText.write('${trimmedValue.substring(0, 2)}/');
+      newText.write(trimmedValue.substring(0, 2) + '/');
       if (trimmedValue.length >= 4) {
-        newText.write('${trimmedValue.substring(2, 4)}/');
+        newText.write(trimmedValue.substring(2, 4) + '/');
         if (trimmedValue.length >= 8) {
           newText.write(trimmedValue.substring(4, 8));
         } else {

@@ -39,13 +39,13 @@ class Materia {
 class MateriaPage extends StatelessWidget {
   final List<Materia> materias;
 
-  const MateriaPage({super.key, required this.materias});
+  MateriaPage({required this.materias});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Matérias'),
+        title: Text('Matérias'),
       ),
       body: ListView.builder(
         itemCount: materias.length,
