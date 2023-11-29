@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'login.dart';
 
 class CadastroPage extends StatefulWidget {
+  const CadastroPage({super.key});
+
   @override
   _CadastroPageState createState() => _CadastroPageState();
 }
@@ -11,6 +13,195 @@ class CadastroPage extends StatefulWidget {
 class _CadastroPageState extends State<CadastroPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  String usernameError = '';
+  String passwordError = '';
+  String confirmPasswordError = '';
+
+  bool obscurePassword = true;
+  bool obscureConfirmPassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Faça seu cadastro',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: const Color(0xFF97E366),
+      ),
+      backgroundColor: const Color(0xFFD8FFBE),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                width: 300,
+                height: 380,
+                decoration: const BoxDecoration(
+                  color: Color(0xfffe6f4de),
+                  border: Border(
+                    top: BorderSide(color: Color(0xFF243618)),
+                    left: BorderSide(color: Color(0xFF243618)),
+                    right: BorderSide(color: Color(0xFF243618)),
+                    bottom: BorderSide(color: Color(0xFF243618)),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: nameController,
+                      onChanged: (_) {
+                        setState(() {
+                          usernameError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Nome de Usuário:',
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorText: usernameError.isEmpty ? null : usernameError,
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: passwordController,
+                      onChanged: (_) {
+                        setState(() {
+                          passwordError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      obscureText: obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Senha:',
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorText: passwordError.isEmpty ? null : passwordError,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          },
+                          icon: Icon(
+                            obscurePassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
+                            color: Colors.green, // Alterando a cor do ícone para verde
+                          ),
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: confirmPasswordController,
+                      onChanged: (_) {
+                        setState(() {
+                          confirmPasswordError = ''; // Limpa a mensagem de erro ao começar a digitar
+                        });
+                      },
+                      obscureText: obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: 'Confirmar Senha:',
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green),
+                        ),
+                        labelStyle: const TextStyle(color: Colors.black),
+                        errorText: confirmPasswordError.isEmpty ? null : confirmPasswordError,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscureConfirmPassword = !obscureConfirmPassword;
+                            });
+                          },
+                          icon: Icon(
+                            obscureConfirmPassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
+                            color: Colors.green, // Alterando a cor do ícone para verde
+                          ),
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    const SizedBox(height: 50), // Adicionado margin-top para centralizar o botão
+                    ElevatedButton(
+                      onPressed: () {
+                        // Validação dos campos
+                        final String username = nameController.text;
+                        final String password = passwordController.text;
+                        final String confirmPassword = confirmPasswordController.text;
+
+                        if (username.isEmpty) {
+                          setState(() {
+                            usernameError = 'Por favor, digite um nome de usuário.';
+                          });
+                        }
+
+                        if (password.isEmpty) {
+                          setState(() {
+                            passwordError = 'Por favor, digite uma senha.';
+                          });
+                        } else {
+                          // Validação da senha
+                          if (password.length != 8) {
+                            setState(() {
+                              passwordError = 'A senha deve ter exatamente 8 caracteres.';
+                            });
+                          } else if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
+                            setState(() {
+                              passwordError = 'Adicione pelo menos 1 letra.';
+                            });
+                          } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+                            setState(() {
+                              passwordError = 'Adicione pelo menos 1 caracter especial.';
+                            });
+                          }
+                        }
+
+                        if (confirmPassword != password) {
+                          setState(() {
+                            confirmPasswordError = 'As senhas não coincidem.';
+                          });
+                        }
+
+                        if (username.isNotEmpty &&
+                            password.isNotEmpty &&
+                            password.length == 8 &&
+                            RegExp(r'[a-zA-Z]').hasMatch(password) &&
+                            RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password) &&
+                            confirmPassword == password) {
+                          // Se os campos são válidos, continue com o registro
+                          _register(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF97E366),
+                        minimumSize: const Size(200, 50),
+                        side: const BorderSide(width: 0.5, color: Colors.black),
+                      ),
+                      child: const Text(
+                        'Cadastrar',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Future<void> _register(BuildContext context) async {
     final String username = nameController.text;
@@ -42,62 +233,24 @@ class _CadastroPageState extends State<CadastroPage> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Cadastro realizado com sucesso')),
+        const SnackBar(content: Text('Cadastro realizado com sucesso')),
       );
 
       // Navegar de volta para a tela de login após o registro bem-sucedido
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => LoginPage(),
+          builder: (context) => const LoginPage(),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
+        const SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
       );
     }
 
     // Limpar os campos após o registro
     nameController.clear();
     passwordController.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Cadastro de Usuário'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: 'Nome de Usuário',
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => _register(context),
-              child: Text('Cadastrar'),
-            ),
-          ],
-        ),
-      ),
-    );
+    confirmPasswordController.clear();
   }
 }
