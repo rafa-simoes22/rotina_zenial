@@ -26,45 +26,44 @@ class InicioPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Adiciona a logo aqui
             Container(
               decoration: BoxDecoration(
-                border: Border.all(width: 3, color: Colors.black), // Borda preta
+                border: Border.all(width: 3, color: Colors.black),
               ),
               child: Image.asset(
-                'assets/logo.png', // Substitua pelo caminho real da sua logo
+                'assets/logo.png',
                 width: 250,
                 height: 250,
               ),
             ),
-            SizedBox(height:100), // Espaçamento entre a logo e os botões
+            SizedBox(height: 16), // Use relative spacing
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/cadastro');
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF97E366), // Cor de fundo
-                minimumSize: Size(200, 50), // Largura e altura
-                side: BorderSide(width: 1, color: Colors.black), // Borda preta
+                primary: Color(0xFF97E366),
+                minimumSize: Size(200, 50),
+                side: BorderSide(width: 1, color: Colors.black),
               ),
               child: Text(
                 'Cadastro',
-                style: TextStyle(color: Colors.black), // Cor do texto preto
+                style: TextStyle(color: Colors.black),
               ),
             ),
-            SizedBox(height: 30), // Espaçamento entre os botões
+            SizedBox(height: 16), // Use relative spacing
             ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF97E366), // Cor de fundo
-                minimumSize: Size(200, 50), // Largura e altura
-                side: BorderSide(width: 1, color: Colors.black), // Borda preta
+                primary: Color(0xFF97E366),
+                minimumSize: Size(200, 50),
+                side: BorderSide(width: 1, color: Colors.black),
               ),
               child: Text(
                 'Login',
-                style: TextStyle(color: Colors.black), // Cor do texto preto
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ],

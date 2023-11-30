@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   bool obscurePassword = true;
 
   Future<void> _login(BuildContext context) async {
+    print("Iniciando o processo de login...");
+
     final String username = nameController.text;
     final String password = passwordController.text;
 
@@ -42,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (username.isNotEmpty && password.isNotEmpty) {
+      print("Usuário e senha não estão vazios. Tentando autenticar...");
+
       final database = await openDatabase(
         join(await getDatabasesPath(), 'user_database.db'),
         onCreate: (db, version) {
@@ -59,6 +63,8 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (users.isNotEmpty) {
+        print("Login bem-sucedido. Navegando para a tela de tarefas...");
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Login bem-sucedido')),
         );
@@ -69,15 +75,19 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) => TelaPrincipal(username: username),
           ),
         );
+
+        // Limpar os campos após o login bem-sucedido
+        nameController.clear();
+        passwordController.clear();
       } else {
+        print("Falha no login. Verifique as credenciais.");
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Falha no login. Verifique suas credenciais.')),
         );
       }
-
-      // Limpar os campos após a tentativa de login
-      nameController.clear();
-      passwordController.clear();
+    } else {
+      print("Usuário e/ou senha vazios. Não realizando o login.");
     }
   }
 

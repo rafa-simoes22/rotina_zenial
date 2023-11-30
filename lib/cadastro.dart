@@ -93,8 +93,8 @@ class _CadastroPageState extends State<CadastroPage> {
                             });
                           },
                           icon: Icon(
-                            obscurePassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
-                            color: Colors.green, // Alterando a cor do ícone para verde
+                            obscurePassword ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.green,
                           ),
                         ),
                       ),
@@ -123,14 +123,14 @@ class _CadastroPageState extends State<CadastroPage> {
                             });
                           },
                           icon: Icon(
-                            obscureConfirmPassword ? Icons.visibility : Icons.visibility_off, // Alterando ícone para olho fechado
-                            color: Colors.green, // Alterando a cor do ícone para verde
+                            obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.green,
                           ),
                         ),
                       ),
                       style: TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 50), // Adicionado margin-top para centralizar o botão
+                    SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
                         // Validação dos campos
@@ -202,6 +202,8 @@ class _CadastroPageState extends State<CadastroPage> {
   }
 
   Future<void> _register(BuildContext context) async {
+    print("Iniciando o processo de registro...");
+
     final String username = nameController.text;
     final String password = passwordController.text;
 
@@ -222,6 +224,8 @@ class _CadastroPageState extends State<CadastroPage> {
     );
 
     if (existingUsers.isEmpty) {
+      print("Usuário não existente. Realizando o cadastro...");
+
       await database.insert(
         'users',
         {
@@ -241,6 +245,8 @@ class _CadastroPageState extends State<CadastroPage> {
         ),
       );
     } else {
+      print("Usuário já existente. Escolha outro nome de usuário.");
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Usuário já existente. Escolha outro nome de usuário.')),
       );
