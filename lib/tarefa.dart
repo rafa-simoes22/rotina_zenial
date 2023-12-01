@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'adicionar_tarefa.dart';
 import 'editar.dart';
-import 'materia.dart';
 
 class Tarefa {
   String titulo;
@@ -49,12 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Color(0xFF97E366), // Cor da AppBar
-        ),
-        scaffoldBackgroundColor: Color(0xFFD8FFBE), // Cor do scaffold
-      ),
+      home: TelaPrincipal(username: ""), // Inicializa com nome de usuário vazio
     );
   }
 }
@@ -147,12 +141,11 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     );
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Rotina Zenial'),
-        backgroundColor: Color(0xFF97E366),
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_today),
@@ -176,33 +169,30 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
               itemCount: tarefas.length,
               itemBuilder: (context, index) {
                 final tarefa = tarefas[index];
-                return Container(
-                  width: 200.0, // Defina a largura desejada aqui
-                  child: Card(
-                    key: Key(tarefa.titulo),
-                    margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                    child: ListTile(
-                      title: Text(tarefa.titulo),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(tarefa.prioridade),
-                          Text(tarefa.dataVencimento),
-                        ],
-                      ),
-                      trailing: Checkbox(
-                        value: tarefa.concluida,
-                        onChanged: (value) {
-                          setState(() {
-                            tarefa.concluida = value ?? false;
-                            _salvarTarefas();
-                          });
-                        },
-                      ),
-                      onTap: () {
-                        _mostrarOpcoes(context, tarefa);
+                return Card(
+                  key: Key(tarefa.titulo),
+                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  child: ListTile(
+                    title: Text(tarefa.titulo),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(tarefa.prioridade),
+                        Text(tarefa.dataVencimento),
+                      ],
+                    ),
+                    trailing: Checkbox(
+                      value: tarefa.concluida,
+                      onChanged: (value) {
+                        setState(() {
+                          tarefa.concluida = value ?? false;
+                          _salvarTarefas();
+                        });
                       },
                     ),
+                    onTap: () {
+                      _mostrarOpcoes(context, tarefa);
+                    },
                   ),
                 );
               },
@@ -217,16 +207,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 });
               },
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MateriaPage(materias: []),
-                ),
-              );
-            },
-            child: Text('Ver Matérias'),
           ),
         ],
       ),
@@ -248,7 +228,6 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         },
         child: Icon(Icons.add),
       ),
-      backgroundColor: Color(0xFFD8FFBE),
     );
   }
 
@@ -290,13 +269,13 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.edit), // Adicione um ícone de edição
-                title: Text('Editar Tarefa'), // Altere o texto do botão
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
-                },
-              ),
+              leading: Icon(Icons.edit), // Adicione um ícone de edição
+              title: Text('Editar Tarefa'), // Altere o texto do botão
+              onTap: () {
+                Navigator.of(context).pop();
+                _mostrarTelaEditar(context, tarefa); // Chama a tela de edição
+              },
+            ),
               ListTile(
                 leading: Icon(Icons.delete),
                 title: Text('Excluir Tarefa'),
