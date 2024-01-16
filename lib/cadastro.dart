@@ -23,35 +23,39 @@ class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Faça seu cadastro',
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Color(0xFF97E366),
-      ),
-      backgroundColor: Color(0xFFD8FFBE),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(16),
-                padding: EdgeInsets.all(16),
-                width: 300,
-                height: 380,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFE6F4DE),
-                  border: Border(
-                    top: BorderSide(color: Color(0xFF243618)),
-                    left: BorderSide(color: Color(0xFF243618)),
-                    right: BorderSide(color: Color(0xFF243618)),
-                    bottom: BorderSide(color: Color(0xFF243618)),
-                  ),
-                ),
+      body: Container(
+        // Use uma Stack para sobrepor a imagem e outros elementos
+        child: Stack(
+          children: [
+            // Adicione a imagem de fundo
+            Image.asset(
+              'assets/cadastro.png',  // Substitua pelo caminho correto da sua imagem
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Center(
+              child: SingleChildScrollView(
                 child: Column(
-                  children: [
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(16),
+                      width: 300,
+                      height: 380,
+                      // Mantenha a cor de fundo para casos em que a imagem não seja carregada
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD8FFBE),
+                        border: Border(
+                          top: BorderSide(color: Color(0xFF243618)),
+                          left: BorderSide(color: Color(0xFF243618)),
+                          right: BorderSide(color: Color(0xFF243618)),
+                          bottom: BorderSide(color: Color(0xFF243618)),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
                     SizedBox(height: 10),
                     TextField(
                       controller: nameController,
@@ -192,14 +196,17 @@ class _CadastroPageState extends State<CadastroPage> {
                       ),
                     ),
                   ],
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Future<void> _register(BuildContext context) async {
     print("Iniciando o processo de registro...");
