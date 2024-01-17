@@ -34,37 +34,47 @@ class InicioPage extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/cadastro');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF97E366),
-                  minimumSize: Size(200, 50),
-                  side: BorderSide(width: 1, color: Colors.black),
-                ),
-                child: Text(
-                  'Cadastro',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
+  onPressed: () {
+    Navigator.pushNamed(context, '/cadastro');
+  },
+  style: ElevatedButton.styleFrom(
+    primary: Color(0xFFDFFF9E), // Cor do botão de cadastro
+    minimumSize: Size(200, 50),
+    side: BorderSide(width: 0.5, color: Colors.black),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0), // Ajuste o raio conforme necessário
+    ),
+    elevation: 2.0, // Ajuste o valor conforme necessário para a intensidade da sombra
+
+  ),
+  child: Text(
+    'Cadastro',
+    style: TextStyle(color: Color(0xFF293D01)), // Cor do texto de cadastro
+  ),
+),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF97E366),
-                  minimumSize: Size(200, 50),
-                  side: BorderSide(width: 1, color: Colors.black),
-                ),
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
+             ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    primary: Color(0xF568200), // Cor do botão
+    minimumSize: Size(200, 50),
+    
+    side: BorderSide(width: 0.5, color: Colors.black),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0), // Ajuste o raio conforme necessário
+    ),
+    elevation: 2.0, // Ajuste o valor conforme necessário para a intensidade da sombra
+  ),
+  child: Text(
+    'Login',
+    style: TextStyle(color: Color(0xFFDFFF9E),), // Cor do texto
+  ),
+),
             ],
           ),
         ),
