@@ -94,35 +94,34 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Faça seu Login:',
-          style: TextStyle(color: Colors.black),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/login.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-        backgroundColor: Color(0xFF97E366),
-      ),
-      backgroundColor: Color(0xFFD8FFBE),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(16),
-              padding: EdgeInsets.all(16),
-              width: 300,
-              height: 350,
-              decoration: BoxDecoration(
-                color: Color(0xFFFE6F4DE),
-                border: Border(
-                  top: BorderSide(color: Color(0xFF243618)),
-                  left: BorderSide(color: Color(0xFF243618)),
-                  right: BorderSide(color: Color(0xFF243618)),
-                  bottom: BorderSide(color: Color(0xFF243618)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(16),
+                padding: EdgeInsets.all(16),
+                width: 300,
+                height: 350,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFE6F4DE),
+                  border: Border(
+                    top: BorderSide(color: Color(0xFF243618)),
+                    left: BorderSide(color: Color(0xFF243618)),
+                    right: BorderSide(color: Color(0xFF243618)),
+                    bottom: BorderSide(color: Color(0xFF243618)),
+                  ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(height: 10),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
                   TextField(
                     controller: nameController,
                     onChanged: (_) {
@@ -183,10 +182,11 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
-                ],
+               ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
