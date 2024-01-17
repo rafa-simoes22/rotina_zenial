@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 300,
                 height: 350,
                 decoration: BoxDecoration(
-                  color: Color(0xFFFE6F4DE),
+                  color: Color(0xFFD8FFBE),
                   border: Border(
                     top: BorderSide(color: Color(0xFF243618)),
                     left: BorderSide(color: Color(0xFF243618)),
