@@ -156,6 +156,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             onPressed: _ordernarTarefasPorPrioridade,
           ),
         ],
+         backgroundColor: Color(0xFF97E300), // Defina a cor desejada aqui
       ),
       body: Column(
         children: <Widget>[
@@ -172,6 +173,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 return Card(
                   key: Key(tarefa.titulo),
                   margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  color: Color(0xFFD4EFA0), // Cor do Container da Tarefa
                   child: ListTile(
                     title: Text(tarefa.titulo),
                     subtitle: Column(
@@ -227,8 +229,8 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
           }
         },
         child: Icon(Icons.add),
-      ),
-    );
+         backgroundColor: Color(0xFF293D01), // Cor do botão
+    ));
   }
 
   int _compararPrioridades(String prioridadeA, String prioridadeB) {
