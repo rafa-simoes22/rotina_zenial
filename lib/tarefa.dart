@@ -145,7 +145,14 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rotina Zenial'),
+  title: Text(
+    'Rotina Zenial',
+    style: TextStyle(
+      fontFamily: 'ArimaMadurai',
+          fontWeight: FontWeight.bold,  // Peso da fonte, se necessário
+    ),
+  ),
+        
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_today),
@@ -162,7 +169,12 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text('Olá, ${widget.username}! Aqui estão suas tarefas:'),
+           child: Text(
+    'Olá, ${widget.username}! Aqui estão suas tarefas:',
+    style: TextStyle(
+      fontFamily: 'ArimaMadurai',
+    ),
+  ),
           ),
           Expanded(
             child: ReorderableListView.builder(
@@ -228,9 +240,13 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
             await _salvarTarefas();
           }
         },
-        child: Icon(Icons.add),
-         backgroundColor: Color(0xFF293D01), // Cor do botão
-    ));
+         child: Icon(
+    Icons.add,
+    color: Colors.white, // Defina a cor branca para o ícone "+"
+  ),
+  backgroundColor: Color(0xFF293D01), // Cor do botão
+),
+    );
   }
 
   int _compararPrioridades(String prioridadeA, String prioridadeB) {

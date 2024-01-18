@@ -49,7 +49,10 @@ class InicioPage extends StatelessWidget {
   ),
   child: Text(
     'Cadastro',
-    style: TextStyle(color: Color(0xFF293D01)), // Cor do texto de cadastro
+    style: TextStyle(color: Color(0xFF293D01),
+     fontFamily: 'ArimaMadurai',  // Nome da fonte definido no pubspec.yaml
+      fontSize: 18.0, // Cor do texto
+       fontWeight: FontWeight.bold, ), // Peso da fonte, se necessário // Cor do texto de cadastro
   ),
 ),
               SizedBox(height: 16),
@@ -72,7 +75,10 @@ class InicioPage extends StatelessWidget {
   ),
   child: Text(
     'Login',
-    style: TextStyle(color: Color(0xFFDFFF9E),), // Cor do texto
+    style: TextStyle(color: Color(0xFFDFFF9E),
+    fontFamily: 'ArimaMadurai',  // Nome da fonte definido no pubspec.yaml
+      fontSize: 18.0, // Cor do texto
+       fontWeight: FontWeight.bold, ), // Peso da fonte, se necessário
   ),
 ),
             ],
