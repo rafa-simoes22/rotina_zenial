@@ -59,8 +59,12 @@ class _TarefasAppState extends State<TarefasApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('Adicionar Tarefa:'),
+          
+        ),
         body: Container(
-          color: Color(0xFFEBFFC5), // Cor de fundo
+          color: Color.fromARGB(255, 213, 248, 148), // Cor de fundo
           child: Center(
             child: SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
