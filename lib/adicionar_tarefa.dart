@@ -253,8 +253,8 @@ class _TarefasAppState extends State<TarefasApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Adicionar Tarefa:'),
-          
+          title: Text('Adicionar Tarefa'),
+          backgroundColor: Color (0xFF568200)
         ),
         body: Container(
           color: Color.fromARGB(255, 213, 248, 148), // Cor de fundo
