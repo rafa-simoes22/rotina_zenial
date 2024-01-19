@@ -52,8 +52,201 @@ class _TarefasAppState extends State<TarefasApp> {
   String _prioridadeSelecionada = 'Alto';
 
   void _adicionarTarefa() {
-    // código do método _adicionarTarefa aqui
+  final RegExp dateRegex = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+
+  if (!dateRegex.hasMatch(_dataVencimentoController.text)) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('A data de vencimento deve estar no formato DD/MM/AAAA.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
   }
+
+  final List<String> dataVencimentoParts = _dataVencimentoController.text.split('/');
+  final int dia = int.parse(dataVencimentoParts[0]);
+  final int mes = int.parse(dataVencimentoParts[1]);
+  final int ano = int.parse(dataVencimentoParts[2]);
+
+  final DateTime dataAtual = DateTime.now();
+
+  if (mes < 1 || mes > 12) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('O mês deve estar entre 1 e 12.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  if (dia < 1 || dia > 31) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('O dia deve estar entre 1 e 31.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('O mês $mes não tem $dia dias.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  if (mes == 2) {
+    if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) {
+      if (dia > 29) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Erro de Data'),
+              content: Text('Fevereiro de $ano tem no máximo 29 dias.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+    } else {
+      if (dia > 28) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Erro de Data'),
+              content: Text('Fevereiro de $ano tem no máximo 28 dias.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+    }
+  }
+
+  if (ano < dataAtual.year) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('O ano não pode ser anterior ao ano atual.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+  final DateTime dataVencimento = DateTime(ano, mes, dia);
+
+  if (dataVencimento.isBefore(dataAtual)) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro de Data'),
+          content: Text('A data de vencimento não pode ser anterior à data atual.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+    return;
+  }
+
+   Tarefa novaTarefa = Tarefa(
+    titulo: _tituloController.text,
+    descricao: _descricaoController.text,
+    dataVencimento: _dataVencimentoController.text,
+    prioridade: _prioridadeSelecionada,
+  );
+
+  String tarefaJson = jsonEncode(novaTarefa);
+
+  Navigator.of(context).pop(tarefaJson);
+}
+
 
   @override
   Widget build(BuildContext context) {
